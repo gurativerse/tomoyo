@@ -71,12 +71,9 @@ flutter:
     - ./asset/trend.png
     - ./asset/reccommendex.png
     - ./asset/netflix.png
-    - ./asset/onhome.png
-    - ./asset/schedule.png
-    - ./asset/search.png
-    - ./asset/more.png
     - ./asset/animebg.png
     - ./asset/icon.png
+    - ./asset/branding.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

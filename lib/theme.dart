@@ -8,6 +8,6 @@ class ColorPalatte {
     'text': 0xFF000000,
     'card': 0xFFFEF2F3,
     'line': 0xFFD7D3D0,
-    'shadow': 0xFFA9A29D
+    'shadow': 0xFFA9A29D,
   };
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tomoyo/client/home.dart';
+import 'package:tomoyo/shared/splash.dart';
 import 'theme.dart';
 
 void main() {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: Color(ColorPalatte.color['base']!),
       ),
-      home: HomePage(),
+      home: Splash(),
     );
   }
 }
