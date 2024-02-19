@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:tomoyo/client/Home.dart';
 import '../theme.dart';
 
-class DefaultLayout extends StatelessWidget {
+class DefaultLayout extends StatefulWidget {
   final Widget pagecontent;
   const DefaultLayout({required this.pagecontent});
 
   @override
+  DefaultLayoutState createState() => DefaultLayoutState();
+}
+
+class DefaultLayoutState extends State<DefaultLayout> {
+  int currentIndex = 0;
+  @override
   Widget build(BuildContext context) {
+    void NavState(int index) {
+      setState(() {
+        currentIndex = index;
+      });
+
+      if (index == 0) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => HomePage(),
+            transitionDuration: const Duration(seconds: 0),
+          ),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
@@ -42,34 +65,39 @@ class DefaultLayout extends StatelessWidget {
           ),
         ),
       ),
-      body: pagecontent,
+      body: widget.pagecontent,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "HOME",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today_outlined),
-              label: "SCHEDULE",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: "SEARCH",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.more_horiz),
-              label: "MORE",
-            )
-          ],
-          showUnselectedLabels: true,
-          selectedItemColor: Color(ColorPalatte.color['button']!),
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700),
-          unselectedItemColor: Color(ColorPalatte.color['border']!),
-          unselectedLabelStyle: TextStyle(
-              color: Color(ColorPalatte.color['border']!),
-              fontWeight: FontWeight.w700)),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "HOME",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today_outlined),
+            label: "SCHEDULE",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: "SEARCH",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "MORE",
+          )
+        ],
+        currentIndex: currentIndex,
+        showUnselectedLabels: true,
+        selectedItemColor: Color(ColorPalatte.color['button']!),
+        selectedLabelStyle:
+            TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+        unselectedItemColor: Color(ColorPalatte.color['border']!),
+        unselectedLabelStyle: TextStyle(
+            color: Color(ColorPalatte.color['border']!),
+            fontWeight: FontWeight.w700,
+            fontSize: 12),
+        onTap: NavState,
+      ),
     );
   }
 }
