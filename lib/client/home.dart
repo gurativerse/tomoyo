@@ -93,29 +93,15 @@ class HomePageContent extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime trend and see all
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   Row(
                     children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            Image.asset('./asset/trend.png'),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Anime Trend',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        'see all',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(ColorPalatte.color['link']!),
+                      Image.asset('./asset/trend.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text(
+                          'Anime Trend',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ],
