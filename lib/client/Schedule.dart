@@ -4,7 +4,6 @@ import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
 import 'package:intl/intl.dart';
 
-
 List<Map<String, String>> animeList = [
   {
     "animeOriginalName": "呪術廻戦",
@@ -65,16 +64,6 @@ List<Map<String, String>> animeList = [
 
 String currentdate = DateFormat('EEEE').format(DateTime.now());
 
-Map<String, String> dayStates = {
-  'MON': 'Monday',
-  'TUE': 'Tuesday',
-  'WED': 'Wednesday',
-  'THU': 'Thursday',
-  'FRI': 'Friday',
-  'SAT': 'Saturday',
-  'SUN': 'Sunday',
-};
-
 class SchedulePage extends StatelessWidget {
   const SchedulePage({super.key});
 
@@ -92,7 +81,16 @@ class DateWidget extends StatefulWidget {
 }
 
 class DateWidgetContent extends State<DateWidget> {
-
+  String currentdate = DateFormat('EEEE').format(DateTime.now());
+  Map<String, String> dayStates = {
+    'MON': 'Monday',
+    'TUE': 'Tuesday',
+    'WED': 'Wednesday',
+    'THU': 'Thursday',
+    'FRI': 'Friday',
+    'SAT': 'Saturday',
+    'SUN': 'Sunday',
+  };
 
   void updateText(String newdate) {
     setState(() {
