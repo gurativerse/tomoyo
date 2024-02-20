@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
+import 'package:tomoyo/client/Schedule.dart';
 import '../theme.dart';
 
 class DefaultLayout extends StatefulWidget {
   final Widget pagecontent;
-  const DefaultLayout({required this.pagecontent});
+  final int Pageindex;
+  const DefaultLayout({required this.pagecontent,required this.Pageindex});
 
   @override
   DefaultLayoutState createState() => DefaultLayoutState();
 }
 
 class DefaultLayoutState extends State<DefaultLayout> {
-  int currentIndex = 0;
+  late int currentIndex;
+  
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.Pageindex; 
+  }
+
   @override
   Widget build(BuildContext context) {
-    void NavState(int index) {
-      setState(() {
-        currentIndex = index;
-      });
 
+    void NavState(int index) {
       if (index == 0) {
         Navigator.pushReplacement(
           context,
@@ -27,7 +33,15 @@ class DefaultLayoutState extends State<DefaultLayout> {
             transitionDuration: const Duration(seconds: 0),
           ),
         );
-      }
+      } else if (index == 1) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => SchedulePage(),
+            transitionDuration: const Duration(seconds: 0),
+          ),
+        );
+      } 
     }
 
     return Scaffold(

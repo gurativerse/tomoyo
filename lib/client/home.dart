@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(pagecontent: HomePageContent());
+    return DefaultLayout(pagecontent: HomePageContent(), Pageindex: 0);
   }
 }
 
