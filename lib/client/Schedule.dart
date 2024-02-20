@@ -154,7 +154,7 @@ class SchedulePageContent extends StatelessWidget {
                     height: 1,
                   ),
                   Padding(
-                      padding: EdgeInsets.symmetric(vertical: 25),
+                      padding: EdgeInsets.symmetric(vertical: 20),
                       child: DateWidget()),
                   Container(
                     color: Color(ColorPalatte.color['line']!),
