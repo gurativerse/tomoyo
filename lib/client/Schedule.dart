@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
+import 'package:intl/intl.dart';
+
 
 List<Map<String, String>> animeList = [
   {
@@ -61,11 +63,67 @@ List<Map<String, String>> animeList = [
   },
 ];
 
+String currentdate = DateFormat('EEEE').format(DateTime.now());
+
+Map<String, String> dayStates = {
+  'MON': 'Monday',
+  'TUE': 'Tuesday',
+  'WED': 'Wednesday',
+  'THU': 'Thursday',
+  'FRI': 'Friday',
+  'SAT': 'Saturday',
+  'SUN': 'Sunday',
+};
+
 class SchedulePage extends StatelessWidget {
   const SchedulePage({super.key});
+
+  // SchedulePageContent createState() => SchedulePageContent();
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(pagecontent: SchedulePageContent(), Pageindex: 1);
+  }
+}
+
+class DateWidget extends StatefulWidget {
+  @override
+  DateWidgetContent createState() => DateWidgetContent();
+}
+
+class DateWidgetContent extends State<DateWidget> {
+
+
+  void updateText(String newdate) {
+    setState(() {
+      currentdate = newdate;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        for (var day in dayStates.keys)
+          GestureDetector(
+            onTap: () {
+              updateText(dayStates[day]!);
+            },
+            child: Container(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                day,
+                style: TextStyle(
+                  color: dayStates[day] == currentdate
+                      ? Color(ColorPalatte.color['button']!)
+                      : Colors.black,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
 
@@ -80,33 +138,29 @@ class SchedulePageContent extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: Column(
                 children: [
+                  // Recommend
+                  Container(
+                    width: double.infinity,
+                    height: 120,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Image.asset('./asset/reccommendex.png',
+                        fit: BoxFit.cover),
+                  ),
+                  Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime trend and see all
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            Image.asset('./asset/trend.png'),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Anime Trend',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        'see all',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(ColorPalatte.color['link']!),
-                        ),
-                      ),
-                    ],
+                  Container(
+                    color: Color(ColorPalatte.color['line']!),
+                    height: 1,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.symmetric(vertical: 25),
+                      child: DateWidget()),
+                  Container(
+                    color: Color(ColorPalatte.color['line']!),
+                    height: 1,
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime list
