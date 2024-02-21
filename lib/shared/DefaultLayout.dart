@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
+import 'package:tomoyo/client/More.dart';
 import 'package:tomoyo/client/Schedule.dart';
 import 'package:tomoyo/client/Search.dart';
 import '../theme.dart';
@@ -47,6 +48,14 @@ class DefaultLayoutState extends State<DefaultLayout> {
           context,
           PageRouteBuilder(
             pageBuilder: (_, __, ___) => SearchPage(),
+            transitionDuration: const Duration(seconds: 0),
+          ),
+        );
+      } else if (index == 3) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => MorePage(),
             transitionDuration: const Duration(seconds: 0),
           ),
         );
