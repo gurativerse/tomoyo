@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tomoyo/client/Login.dart';
 import 'package:tomoyo/theme.dart';
 
 List<Map<String, String>> IntroInfo = [
@@ -90,8 +91,8 @@ class IntroPageTemplate extends StatelessWidget {
                   MaterialStateProperty.all<Color>(Color(0XFFEA4958)),
             ),
             onPressed: () {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LoginPage()));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
