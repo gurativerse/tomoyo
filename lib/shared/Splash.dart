@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
+import 'package:tomoyo/client/Introduct.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _SplashState extends State<Splash> {
       Duration(seconds: 3),
       () => Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) =>IntroPage()),
       ),
     );
   }
