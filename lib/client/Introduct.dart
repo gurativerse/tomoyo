@@ -90,7 +90,7 @@ class IntroPageTemplate extends StatelessWidget {
                   MaterialStateProperty.all<Color>(Color(0XFFEA4958)),
             ),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             },
             child: Padding(
