@@ -93,7 +93,7 @@ class HomePageContent extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime trend and see all
-                   Row(
+                  Row(
                     children: [
                       Image.asset('./asset/trend.png'),
                       Padding(

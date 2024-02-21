@@ -64,7 +64,10 @@ class SearchPageContent extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 5),
-                            child: Icon(Icons.manage_search, color: Colors.white,),
+                            child: Icon(
+                              Icons.manage_search,
+                              color: Colors.white,
+                            ),
                           ),
                         )),
                   ],

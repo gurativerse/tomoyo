@@ -112,7 +112,7 @@ class AnimeInfoPage extends StatelessWidget {
                                     text: animeEngName),
                               ),
                               SizedBox(width: 5),
-                               Flexible(
+                              Flexible(
                                 child: RichText(
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1, // Set maxLines to 1
@@ -139,13 +139,10 @@ class AnimeInfoPage extends StatelessWidget {
                                 animedescdumb),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 25),
-                            child: Row(
-                              children: [
-                                
-                              ],
-                            )
-                          ),
+                              padding: EdgeInsets.only(top: 25),
+                              child: Row(
+                                children: [],
+                              )),
                         ],
                       )),
                 ))

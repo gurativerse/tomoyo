@@ -8,7 +8,7 @@ import '../theme.dart';
 class DefaultLayout extends StatefulWidget {
   final Widget pagecontent;
   final int Pageindex;
-  const DefaultLayout({required this.pagecontent,required this.Pageindex});
+  const DefaultLayout({required this.pagecontent, required this.Pageindex});
 
   @override
   DefaultLayoutState createState() => DefaultLayoutState();
@@ -16,16 +16,15 @@ class DefaultLayout extends StatefulWidget {
 
 class DefaultLayoutState extends State<DefaultLayout> {
   late int currentIndex;
-  
+
   @override
   void initState() {
     super.initState();
-    currentIndex = widget.Pageindex; 
+    currentIndex = widget.Pageindex;
   }
 
   @override
   Widget build(BuildContext context) {
-
     void NavState(int index) {
       if (index == 0) {
         Navigator.pushReplacement(
@@ -59,7 +58,7 @@ class DefaultLayoutState extends State<DefaultLayout> {
             transitionDuration: const Duration(seconds: 0),
           ),
         );
-      } 
+      }
     }
 
     return Scaffold(
