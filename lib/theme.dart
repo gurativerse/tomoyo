@@ -9,5 +9,7 @@ class ColorPalatte {
     'card': 0xFFFEF2F3,
     'line': 0xFFD7D3D0,
     'shadow': 0xFFA9A29D,
+    'setting': 0xFFF5F5F4,
+    'icon': 0xFFA9A29D,
   };
 }
