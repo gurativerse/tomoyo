@@ -18,14 +18,13 @@ class SearchPageContent extends StatelessWidget {
         Expanded(
           child: SingleChildScrollView(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 35),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(padding: EdgeInsets.symmetric(vertical: 50)),
                     Container(
                       width: 280,
                       height: 50,
