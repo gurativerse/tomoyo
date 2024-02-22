@@ -71,6 +71,32 @@ class MorePageContent extends StatelessWidget {
                                   )))),
                     ],
                   ),
+                  Padding(padding: EdgeInsets.only(top: 8)),
+                  GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          width: double.infinity,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Color(ColorPalatte.color['setting']!),
+                          ),
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('My favourite',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      )),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Color(ColorPalatte.color['icon']!),
+                                  ),
+                                ],
+                              )))),
                   Padding(padding: EdgeInsets.only(top: 20)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
