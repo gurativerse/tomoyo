@@ -29,123 +29,99 @@ class AnimeInfoPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  child: Image.asset('./asset/animebg.png', fit: BoxFit.cover),
-                ),
-                Positioned(
-                    top: 110,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child:
-                                  Image.network(animePoster, fit: BoxFit.cover),
-                            ),
+            Container(
+              width: double.infinity,
+              height: 140,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(0),
+              ),
+              child: Image.asset('./asset/animebg.png', fit: BoxFit.cover),
+            ),
+            Row(
+              children:  <Widget>[
+                Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(children: [
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(animePoster, fit: BoxFit.cover),
+                      ),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.grey, width: 1.0),
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  side: BorderSide(
-                                      color: Colors.grey, width: 1.0),
-                                ),
-                                minimumSize: Size(
-                                    MediaQuery.of(context).size.width * 0.1,
-                                    0)),
-                            child: Row(
-                              children: [
-                                Icon(Icons.add_circle,
-                                    color: Colors.black, size: 14),
-                                SizedBox(width: 2),
-                                Text(
-                                  'add to your favourite',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 8,
-                                  ),
-                                ),
-                              ],
+                          minimumSize:
+                              Size(MediaQuery.of(context).size.width * 0.1, 0)),
+                      child: Row(
+                        children: [
+                          Icon(Icons.add_circle, color: Colors.black, size: 14),
+                          SizedBox(width: 2),
+                          Text(
+                            'add to your favourite',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 8,
                             ),
-                            onPressed: () {},
                           ),
                         ],
                       ),
-                    )),
-              ],
-            ),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      child: Stack(
-                        children: [
-                          Row(
-                            children: [
-                              RichText(
+                      onPressed: () {},
+                    ),
+                  ])),
+                ),
+                Expanded(
+                flex: 4,
+                child: Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                            RichText(
+                              overflow: TextOverflow.ellipsis,
+                              strutStyle: StrutStyle(fontSize: 12.0),
+                              text: TextSpan(
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  text: animeEngName),
+                            ),
+                            SizedBox(width: 5),
+                            Flexible(
+                              child: RichText(
                                 overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                                 strutStyle: StrutStyle(fontSize: 12.0),
                                 text: TextSpan(
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                    text: animeEngName),
-                              ),
-                              SizedBox(width: 5),
-                              Flexible(
-                                child: RichText(
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1, // Set maxLines to 1
-                                  strutStyle: StrutStyle(fontSize: 12.0),
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      color:
-                                          Color(ColorPalatte.color['shadow']!),
-                                      fontSize: 12,
-                                    ),
-                                    text: animeOriginalName,
+                                  style: TextStyle(
+                                    color: Color(ColorPalatte.color['shadow']!),
+                                    fontSize: 12,
                                   ),
+                                  text: animeOriginalName,
                                 ),
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 25),
-                            child: Text(
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w200),
-                                animedescdumb),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(top: 25),
-                              child: Row(
-                                children: [],
-                              )),
-                        ],
-                      )),
-                ))
+                        ),
+                        Text(
+                            style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w200),
+                            animedescdumb),
+                      ],
+                    ))),
+              ],
+            )
           ],
         ),
       ),
