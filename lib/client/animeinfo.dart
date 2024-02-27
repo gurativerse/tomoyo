@@ -31,100 +31,140 @@ class AnimeInfoPage extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 140,
+              height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(0),
               ),
               child: Image.asset('./asset/animebg.png', fit: BoxFit.cover),
             ),
-            Row(
-              children:  <Widget>[
-                Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(children: [
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(animePoster, fit: BoxFit.cover),
-                      ),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.grey, width: 1.0),
-                          ),
-                          minimumSize:
-                              Size(MediaQuery.of(context).size.width * 0.1, 0)),
-                      child: Row(
-                        children: [
-                          Icon(Icons.add_circle, color: Colors.black, size: 14),
-                          SizedBox(width: 2),
-                          Text(
-                            'add to your favourite',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 8,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
-                    ),
-                  ])),
-                ),
-                Expanded(
-                flex: 4,
-                child: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                            RichText(
-                              overflow: TextOverflow.ellipsis,
-                              strutStyle: StrutStyle(fontSize: 12.0),
-                              text: TextSpan(
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  text: animeEngName),
-                            ),
-                            SizedBox(width: 5),
-                            Flexible(
-                              child: RichText(
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                strutStyle: StrutStyle(fontSize: 12.0),
-                                text: TextSpan(
-                                  style: TextStyle(
-                                    color: Color(ColorPalatte.color['shadow']!),
-                                    fontSize: 12,
-                                  ),
-                                  text: animeOriginalName,
-                                ),
-                              ),
-                        ),
-                        Text(
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w200),
-                            animedescdumb),
-                      ],
-                    ))),
-              ],
-            )
+            Padding(padding: EdgeInsets.only(top: 15)),
+            AnimeInfoHeader(
+                animeOriginalName: animeOriginalName,
+                animeEngName: animeEngName,
+                animePoster: animePoster,
+                availablePlatform: availablePlatform)
           ],
         ),
       ),
+    );
+  }
+}
+
+class AnimeInfoHeader extends StatelessWidget {
+  final String animeOriginalName;
+  final String animeEngName;
+  final String animePoster;
+  final String availablePlatform;
+
+  const AnimeInfoHeader({
+    Key? key,
+    required this.animeOriginalName,
+    required this.animeEngName,
+    required this.animePoster,
+    required this.availablePlatform,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            Container(
+              height: 200,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(animePoster, fit: BoxFit.cover),
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(top: 5)),
+            TextButton(
+              style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(color: Colors.grey, width: 1.0),
+                  ),
+                  minimumSize:
+                      Size(MediaQuery.of(context).size.width * 0.1, 0)),
+              child: Row(
+                children: [
+                  Icon(Icons.add_circle, color: Colors.black, size: 14),
+                  SizedBox(width: 2),
+                  Text(
+                    'add to your favourite',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 8,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.only(left: 20)),
+        Container(
+            width: MediaQuery.of(context).size.width * 0.45,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  overflow: TextOverflow.ellipsis,
+                  strutStyle: StrutStyle(fontSize: 12.0),
+                  textAlign: TextAlign.left,
+                  softWrap: true,
+                  maxLines: 2,
+                  text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      text: animeEngName),
+                ),
+                SizedBox(height: 10),
+                RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  strutStyle: StrutStyle(fontSize: 12.0),
+                  textAlign: TextAlign.left,
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: Color(ColorPalatte.color['shadow']!),
+                      fontSize: 12,
+                    ),
+                    text: animeOriginalName,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Airing',
+                          style: TextStyle(
+                            color: Color(ColorPalatte.color['shadow']!),
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          'Finished Airing',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ))
+      ],
     );
   }
 }
