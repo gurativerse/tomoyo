@@ -25,7 +25,9 @@ class AnimeInfoPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-      body: Padding(
+      body: Expanded(
+          child: SingleChildScrollView(
+              child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: [
@@ -42,10 +44,51 @@ class AnimeInfoPage extends StatelessWidget {
                 animeOriginalName: animeOriginalName,
                 animeEngName: animeEngName,
                 animePoster: animePoster,
-                availablePlatform: availablePlatform)
+                availablePlatform: availablePlatform),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Short Description',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 5)),
+                  Text(
+                    animedescdumb,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 15)),
+                  Text(
+                    'Trailer',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),                  
+                  Padding(padding: EdgeInsets.only(top: 15)),
+                  Text(
+                    'Episodes',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 5)),
+                ],
+              ),
+            )
           ],
         ),
-      ),
+      )))
+      ,
     );
   }
 }
@@ -124,7 +167,7 @@ class AnimeInfoHeader extends StatelessWidget {
                       ),
                       text: animeEngName),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 2),
                 RichText(
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -138,21 +181,61 @@ class AnimeInfoHeader extends StatelessWidget {
                     text: animeOriginalName,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Airing',
+                      style: TextStyle(
+                        color: Color(ColorPalatte.color['shadow']!),
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'Finished Airing',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
                 Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Airing',
+                          'Genre',
                           style: TextStyle(
                             color: Color(ColorPalatte.color['shadow']!),
                             fontSize: 12,
                           ),
                         ),
                         Text(
-                          'Finished Airing',
+                          'TV',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Status',
+                          style: TextStyle(
+                            color: Color(ColorPalatte.color['shadow']!),
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          'END',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 12,
@@ -161,7 +244,47 @@ class AnimeInfoHeader extends StatelessWidget {
                       ],
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Original run',
+                      style: TextStyle(
+                        color: Color(ColorPalatte.color['shadow']!),
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'Oct 3, 2020 - Mar 27, 2021',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Season',
+                      style: TextStyle(
+                        color: Color(ColorPalatte.color['shadow']!),
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'Winter 2020',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ],
             ))
       ],
