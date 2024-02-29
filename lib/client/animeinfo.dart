@@ -72,7 +72,19 @@ class AnimeInfoPage extends StatelessWidget {
                         color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.bold),
-                  ),                  
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 10)),
+                  Container(
+                    width: double.infinity,
+                    height: 200,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey,
+                    ),
+                    // child: Image.asset('./asset/reccommendex.png',
+                    //     fit: BoxFit.cover),
+                  ),
                   Padding(padding: EdgeInsets.only(top: 15)),
                   Text(
                     'Episodes',
@@ -81,14 +93,53 @@ class AnimeInfoPage extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
-                  Padding(padding: EdgeInsets.only(top: 5)),
+                  Padding(padding: EdgeInsets.only(top: 10)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                          width: double.infinity,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(animePoster),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                  bottom: 10,
+                                  left: 20,
+                                  child: Text(
+                                    'Episode 1',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                            ],
+                          )),
+                      Padding(padding: EdgeInsets.only(top: 5)),
+                    ],
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 15)),
+                  Text(
+                    'Related anime',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 10)),
+                  //anime card
                 ],
               ),
             )
           ],
         ),
-      )))
-      ,
+      ))),
     );
   }
 }
