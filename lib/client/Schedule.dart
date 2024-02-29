@@ -156,11 +156,12 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
                         shrinkWrap: true,
                         itemCount: snapshot.data?.length ?? 0,
                         itemBuilder: (context, index) {
-                          var anime = snapshot.data![index]['media'];
-                          var coverImage = anime['coverImage']['extraLarge'];
+                          var animeData = snapshot.data![index]['media'];
+                          var coverImage = animeData['coverImage']['extraLarge'];
                           return AnimeCard(
-                            animeOriginalName: anime['jpName'],
-                            animeEngName: anime['name'],
+                            animeId: animeData['id'],
+                            animeOriginalName: animeData['jpName'],
+                            animeEngName: animeData['name'],
                             animePoster: coverImage,
                             availablePlatform: "Netflix",
                           );

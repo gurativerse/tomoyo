@@ -93,6 +93,7 @@ class _HomePageContentState extends State<HomePageContent> {
                           shrinkWrap: true,
                           children: animeList.map((animeData) {
                             return AnimeCard(
+                              animeId: animeData['id'],
                               animeOriginalName: animeData['jpName'],
                               animeEngName: animeData['name'],
                               animePoster: animeData['coverImage']

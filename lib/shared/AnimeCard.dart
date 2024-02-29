@@ -3,6 +3,7 @@ import '../theme.dart';
 import '../client/AnimeInfo.dart';
 
 class AnimeCard extends StatelessWidget {
+  final animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
@@ -10,6 +11,7 @@ class AnimeCard extends StatelessWidget {
 
   const AnimeCard({
     Key? key,
+    required this.animeId,
     required this.animeOriginalName,
     required this.animeEngName,
     required this.animePoster,
@@ -24,6 +26,7 @@ class AnimeCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => AnimeInfoPage(
+                        animeId: animeId,
                         animeOriginalName: animeOriginalName,
                         animeEngName: animeEngName,
                         animePoster: animePoster,
