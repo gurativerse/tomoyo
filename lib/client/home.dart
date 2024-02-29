@@ -7,8 +7,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchAnimeList() async {
-  final response =
-      await http.get(Uri.parse('http://localhost:4000/v1/animes/seasonal'));
+  final response = await http
+      .get(Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/seasonal'));
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body)['data'];
@@ -95,7 +95,8 @@ class _HomePageContentState extends State<HomePageContent> {
                             return AnimeCard(
                               animeOriginalName: animeData['jpName'],
                               animeEngName: animeData['name'],
-                              animePoster: animeData['coverImage']['extraLarge'],
+                              animePoster: animeData['coverImage']
+                                  ['extraLarge'],
                               availablePlatform: 'netflix',
                             );
                           }).toList(),

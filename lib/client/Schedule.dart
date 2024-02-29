@@ -84,8 +84,8 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
   String selectedDay = DateFormat('EEEE').format(DateTime.now());
 
   Future<List<dynamic>> fetchAnimeList(String day) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:4000/v1/animes/calendar'));
+    final response = await http
+        .get(Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/calendar'));
 
     if (response.statusCode == 200) {
       List<dynamic> allAnimes = jsonDecode(response.body)['data'];
@@ -95,7 +95,7 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
     }
   }
 
-   void updateSelectedDay(String newDay) {
+  void updateSelectedDay(String newDay) {
     setState(() {
       selectedDay = newDay;
     });
