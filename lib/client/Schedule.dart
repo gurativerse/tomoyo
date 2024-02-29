@@ -4,63 +4,8 @@ import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
 import 'package:intl/intl.dart';
 
-List<Map<String, String>> animeList = [
-  {
-    "animeOriginalName": "呪術廻戦",
-    "animeEngName": "Jujutsu Kaisen",
-    "animePoster": "https://m1r.ai/9/r35vt.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "Solo leveling",
-    "animeEngName": "Solo leveling",
-    "animePoster": "https://m1r.ai/9/2r5yx.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "ワンピース",
-    "animeEngName": "One Piece",
-    "animePoster": "https://m1r.ai/9/mm3nu.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "ハウルの動く城",
-    "animeEngName": "Howl‘s Moving Castle",
-    "animePoster": "https://m1r.ai/9/mwp95.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "となりのトトロ",
-    "animeEngName": "My Neighbor Totoro",
-    "animePoster": "https://m1r.ai/9/h8jza.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "君に届け",
-    "animeEngName": "Kimi ni Todoke",
-    "animePoster": "https://m1r.ai/9/qidxj.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "転生したらスライムだった件",
-    "animeEngName": "That Time I Got Reincarnated as a Slime",
-    "animePoster": "https://m1r.ai/9/njb0k.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "ようこそ実力至上主義の教室へ ",
-    "animeEngName": "Classroom of the Elite Season",
-    "animePoster": "https://m1r.ai/9/4w17f.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "マッシュル-MASHLE- 神覚者候補選抜試験編",
-    "animeEngName": "MASHLE: MAGIC AND MUSCLES",
-    "animePoster":
-        "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166610-IjJ8YLOKsua4.jpg",
-    "availablePlatform": "netflix",
-  },
-];
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 String currentdate = DateFormat('EEEE').format(DateTime.now());
 
@@ -76,6 +21,10 @@ class SchedulePage extends StatelessWidget {
 }
 
 class DateWidget extends StatefulWidget {
+  final Function(String) onDaySelected;
+
+  DateWidget({required this.onDaySelected});
+
   @override
   DateWidgetContent createState() => DateWidgetContent();
 }
@@ -96,6 +45,7 @@ class DateWidgetContent extends State<DateWidget> {
     setState(() {
       currentdate = newdate;
     });
+    widget.onDaySelected(newdate);
   }
 
   @override
@@ -125,7 +75,32 @@ class DateWidgetContent extends State<DateWidget> {
   }
 }
 
-class SchedulePageContent extends StatelessWidget {
+class SchedulePageContent extends StatefulWidget {
+  @override
+  _SchedulePageContentState createState() => _SchedulePageContentState();
+}
+
+class _SchedulePageContentState extends State<SchedulePageContent> {
+  String selectedDay = DateFormat('EEEE').format(DateTime.now());
+
+  Future<List<dynamic>> fetchAnimeList(String day) async {
+    final response =
+        await http.get(Uri.parse('http://localhost:4000/v1/animes/calendar'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> allAnimes = jsonDecode(response.body)['data'];
+      return allAnimes.where((anime) => anime['airingDay'] == day).toList();
+    } else {
+      throw Exception('Failed to load anime calendar');
+    }
+  }
+
+   void updateSelectedDay(String newDay) {
+    setState(() {
+      selectedDay = newDay;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -155,31 +130,43 @@ class SchedulePageContent extends StatelessWidget {
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(vertical: 20),
-                      child: DateWidget()),
+                      child: DateWidget(onDaySelected: updateSelectedDay)),
                   Container(
                     color: Color(ColorPalatte.color['line']!),
                     height: 1,
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime list
-                  GridView.count(
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    childAspectRatio: (1 / (300 / 150)),
-                    controller: ScrollController(keepScrollOffset: false),
-                    shrinkWrap: true,
-                    children: List.generate(
-                      animeList.length,
-                      (index) => AnimeCard(
-                        animeOriginalName: animeList[index]
-                            ["animeOriginalName"]!,
-                        animeEngName: animeList[index]["animeEngName"]!,
-                        animePoster: animeList[index]["animePoster"]!,
-                        availablePlatform: animeList[index]
-                            ["availablePlatform"]!,
-                      ),
-                    ),
+                  FutureBuilder<List<dynamic>>(
+                    future: fetchAnimeList(selectedDay),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      }
+
+                      // Building the anime list dynamically based on the JSON response
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: (1 / (300 / 150)),
+                        ),
+                        controller: ScrollController(keepScrollOffset: false),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          var anime = snapshot.data![index]['media'];
+                          var coverImage = anime['coverImage']['extraLarge'];
+                          return AnimeCard(
+                            animeOriginalName: anime['jpName'],
+                            animeEngName: anime['name'],
+                            animePoster: coverImage,
+                            availablePlatform: "Netflix",
+                          );
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
