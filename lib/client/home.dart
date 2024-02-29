@@ -3,63 +3,19 @@ import '../theme.dart';
 import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
 
-List<Map<String, String>> animeList = [
-  {
-    "animeOriginalName": "呪術廻戦",
-    "animeEngName": "Jujutsu Kaisen",
-    "animePoster": "https://m1r.ai/9/r35vt.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "Solo leveling",
-    "animeEngName": "Solo leveling",
-    "animePoster": "https://m1r.ai/9/2r5yx.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "ワンピース",
-    "animeEngName": "One Piece",
-    "animePoster": "https://m1r.ai/9/mm3nu.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "ハウルの動く城",
-    "animeEngName": "Howl‘s Moving Castle",
-    "animePoster": "https://m1r.ai/9/mwp95.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "となりのトトロ",
-    "animeEngName": "My Neighbor Totoro",
-    "animePoster": "https://m1r.ai/9/h8jza.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "君に届け",
-    "animeEngName": "Kimi ni Todoke",
-    "animePoster": "https://m1r.ai/9/qidxj.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "転生したらスライムだった件",
-    "animeEngName": "That Time I Got Reincarnated as a Slime",
-    "animePoster": "https://m1r.ai/9/njb0k.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "ようこそ実力至上主義の教室へ ",
-    "animeEngName": "Classroom of the Elite Season",
-    "animePoster": "https://m1r.ai/9/4w17f.jpg",
-    "availablePlatform": "netflix",
-  },
-  {
-    "animeOriginalName": "マッシュル-MASHLE- 神覚者候補選抜試験編",
-    "animeEngName": "MASHLE: MAGIC AND MUSCLES",
-    "animePoster":
-        "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166610-IjJ8YLOKsua4.jpg",
-    "availablePlatform": "netflix",
-  },
-];
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<List<dynamic>> fetchAnimeList() async {
+  final response =
+      await http.get(Uri.parse('http://localhost:4000/v1/animes/seasonal'));
+
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body)['data'];
+  } else {
+    throw Exception('Failed to load anime list');
+  }
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -69,7 +25,20 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class HomePageContent extends StatelessWidget {
+class HomePageContent extends StatefulWidget {
+  @override
+  _HomePageContentState createState() => _HomePageContentState();
+}
+
+class _HomePageContentState extends State<HomePageContent> {
+  late Future<List<dynamic>> _animeList;
+
+  @override
+  void initState() {
+    super.initState();
+    _animeList = fetchAnimeList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -108,25 +77,34 @@ class HomePageContent extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime list
-                  GridView.count(
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    childAspectRatio: (1 / (300 / 150)),
-                    controller: ScrollController(keepScrollOffset: false),
-                    shrinkWrap: true,
-                    children: List.generate(
-                      animeList.length,
-                      (index) => AnimeCard(
-                        animeOriginalName: animeList[index]
-                            ["animeOriginalName"]!,
-                        animeEngName: animeList[index]["animeEngName"]!,
-                        animePoster: animeList[index]["animePoster"]!,
-                        availablePlatform: animeList[index]
-                            ["availablePlatform"]!,
-                      ),
-                    ),
-                  ),
+                  FutureBuilder(
+                    future: _animeList,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        final animeList = snapshot.data as List<dynamic>;
+                        return GridView.count(
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          crossAxisCount: 3,
+                          childAspectRatio: (1 / (300 / 150)),
+                          controller: ScrollController(keepScrollOffset: false),
+                          shrinkWrap: true,
+                          children: animeList.map((animeData) {
+                            return AnimeCard(
+                              animeOriginalName: animeData['jpName'],
+                              animeEngName: animeData['name'],
+                              animePoster: animeData['coverImage']['extraLarge'],
+                              availablePlatform: 'netflix',
+                            );
+                          }).toList(),
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
+                  )
                 ],
               ),
             ),
