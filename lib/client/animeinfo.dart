@@ -6,9 +6,6 @@ import '../theme.dart';
 import '../shared/DefaultLayout.dart';
 import 'package:http/http.dart' as http;
 
-final String animedescdumb =
-    'อิตาโดริ ยูจิ นักเรียนมัธยมปลายที่มีสมรรถภาพทางร่างกายสูง วันหนึ่งเขาได้กลืนนิ้วต้องคำสาปเข้าไป “นิ้วเทพอสูรเรียวเมนสุคุนะ” เพื่อช่วยรุ่นพี่จาก “วัตถุต้องคำสาป” ทำให้คำสาป “สุคุนะ”กลายเป็นส่วนหนึ่งของเขา หลังจากนั้นเขาก็ได้เข้าโรงเรียนไสยเวทย์ เพื่อทำให้คำพูดสุดท้ายของคุณปู่ “จงช่วยเหลือผู้อื่น” เป็นจริง ยูจิจึงไม่หยุดที่จะต่อสู้กับ “คำสาป”';
-
 Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
   final response = await http.get(
       Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/info/$animeId'));
