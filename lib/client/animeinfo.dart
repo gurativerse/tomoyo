@@ -196,8 +196,8 @@ class AnimeInfoHeader extends StatelessWidget {
   final String availablePlatform;
   final String status;
   final String genre;
-  final DateTime startDate;
-  final DateTime endDate;
+  final startDate;
+  final endDate;
   final String season;
   final String seasonYear;
   final String bannerImage;
