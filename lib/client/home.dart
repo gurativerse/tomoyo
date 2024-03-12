@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme.dart';
 import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:tomoyo/client/Home.dart';
 import 'package:tomoyo/client/Introduct.dart';
 
 class Splash extends StatefulWidget {

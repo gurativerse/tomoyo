@@ -51,7 +51,7 @@ class SearchPageContent extends StatelessWidget {
                         child: TextButton(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0XFFEA4958)),
+                                Color(ColorPalatte.color['button']!)),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(

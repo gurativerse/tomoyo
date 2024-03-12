@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../theme.dart';
-import '../shared/DefaultLayout.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
@@ -63,15 +62,16 @@ class AnimeInfoPage extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    child:
-                        // Image.asset('./asset/animebg.png', fit: BoxFit.cover),
-                        Image(image: NetworkImage(animeData['bannerImage']), fit: BoxFit.cover)
-                  ),
+                      width: double.infinity,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      child:
+                          // Image.asset('./asset/animebg.png', fit: BoxFit.cover),
+                          Image(
+                              image: NetworkImage(animeData['bannerImage']),
+                              fit: BoxFit.cover)),
                   Padding(padding: EdgeInsets.only(top: 15)),
                   AnimeInfoHeader(
                       animeId: animeData['id'],
@@ -189,18 +189,18 @@ class AnimeInfoPage extends StatelessWidget {
 }
 
 class AnimeInfoHeader extends StatelessWidget {
-  final animeId;
+  final int animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
   final String availablePlatform;
   final String status;
   final String genre;
-  final startDate;
-  final endDate;
-  final season;
-  final seasonYear;
-  final bannerImage;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String season;
+  final String seasonYear;
+  final String bannerImage;
 
   const AnimeInfoHeader(
       {Key? key,

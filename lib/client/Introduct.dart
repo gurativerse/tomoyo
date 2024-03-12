@@ -1,6 +1,5 @@
 // 3 pages here
 import 'package:flutter/material.dart';
-import 'package:tomoyo/client/Home.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tomoyo/client/Login.dart';
 import 'package:tomoyo/theme.dart';
