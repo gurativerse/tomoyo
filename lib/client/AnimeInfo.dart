@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tomoyo/shared/AnimeCard.dart';
 import '../theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
   final response = await http.get(
@@ -16,7 +18,44 @@ Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
   }
 }
 
-class AnimeInfoPage extends StatelessWidget {
+Future<List<dynamic>> fetchEpisodeInfo(animeId) async {
+  final response = await http.get(
+      Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/episode/$animeId'));
+
+  if (response.statusCode == 200) {
+    // Assuming the 'data' key contains a list of episodes
+    return jsonDecode(response.body)['data'];
+  } else {
+    throw Exception('Failed to load episode info');
+  }
+}
+
+class Licensor {
+  final String id;
+  final String name;
+  final String site;
+  final String icon;
+  final String description;
+
+  Licensor(
+      {required this.id,
+      required this.name,
+      required this.site,
+      required this.icon,
+      required this.description});
+
+  factory Licensor.fromJson(Map<String, dynamic> json) {
+    return Licensor(
+      id: json['id'],
+      name: json['name'],
+      site: json['site'],
+      icon: json['icon'],
+      description: json['description'],
+    );
+  }
+}
+
+class AnimeInfoPage extends StatefulWidget {
   final animeId;
   final String animeOriginalName;
   final String animeEngName;
@@ -33,42 +72,109 @@ class AnimeInfoPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _AnimeInfoPageState createState() => _AnimeInfoPageState();
+}
+
+class _AnimeInfoPageState extends State<AnimeInfoPage> {
+  String? _selectedLicensorId;
+  List _licensors = []; // Initialize an empty list of licensors
+  List _episodes = [];
+  List _filteredEpisodes = [];
+  bool _isLoading = true; // Track loading state
+
+  @override
+  void initState() {
+    super.initState();
+    fetchInitialData();
+  }
+
+  void fetchInitialData() async {
+    final animeInfo = await fetchAnimeId(widget.animeId);
+    final episodeData = await fetchEpisodeInfo(widget.animeId);
+
+    if (animeInfo['lc'] != null && animeInfo['lc'].isNotEmpty) {
+      List<Licensor> licensors =
+          (animeInfo['lc'] as List).map((lc) => Licensor.fromJson(lc)).toList();
+      String initialLicensorId = licensors.first.id;
+
+      setState(() {
+        _licensors = licensors;
+        _selectedLicensorId =
+            initialLicensorId; // Set the first licensor's ID as selected by default
+        _episodes = episodeData;
+        _isLoading = false;
+      });
+
+      filterAndSortEpisodes(); // Ensure this is called here to immediately filter episodes based on the initial selection
+    } else {
+      // Handle the case where there are no licensors
+      setState(() {
+        _episodes = episodeData;
+      });
+    }
+  }
+
+  void filterAndSortEpisodes() {
+    // Assuming episodes have a 'lcID' field that is a string and matches the selected licensor's id.
+    setState(() {
+      _filteredEpisodes = _episodes
+          .where((episode) => episode['lcID'].toString() == _selectedLicensorId)
+          .toList();
+      // Sort if necessary, assuming there is an 'episodeNumber' field to sort by.
+      _filteredEpisodes.sort((a, b) => int.parse(a['episodeNumber'].toString())
+          .compareTo(int.parse(b['episodeNumber'].toString())));
+    });
+  }
+
+  // Assuming animeData is already fetched and available
+  void _populateLicensors(List<dynamic> lcData) {
+    setState(() {
+      _licensors = lcData.map((lc) => Licensor.fromJson(lc)).toList();
+      if (_licensors.isNotEmpty) {
+        _selectedLicensorId = _licensors.first.id;
+      }
+    });
+  }
+
+  void _launchURL() async {
+    final Uri url = Uri.parse('https://flutter.dev');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchAnimeId(animeId),
+        future: fetchAnimeId(widget.animeId),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (_isLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            // Assuming the snapshot.data contains the anime info
             final animeData = snapshot.data!;
+            final List<Licensor> licensors = (animeData['lc'] as List)
+                .map((lc) => Licensor.fromJson(lc))
+                .toList();
 
+            // Set the initial selected licensor ID, if not already set and licensors are available
+            if (_selectedLicensorId == null && licensors.isNotEmpty) {
+              _selectedLicensorId = licensors.first.id;
+              // Note: We avoid calling setState here as we're in the build method
+            }
             final animeDescription = animeData['description']
                 .replaceAll("<br>", "")
                 .replaceAll("\\n", "")
                 .replaceAll("<i>", "")
                 .replaceAll("</i>", "");
 
-            print('animeId: ${animeData['id']}');
-            print('animeOriginalName: ${animeData['title']['native']}');
-            print('animeEngName: ${animeData['title']['english']}');
-            print('animePoster: ${animeData['coverImage']['extraLarge']}');
-            print('availablePlatform: netflix');
-            print('status: ${animeData['status']}');
-            print(
-                'genre: ${animeData['genres'] != null ? animeData['genres'][0] : 'N/A'}');
-            print('startDate: ${animeData['startDate']}');
-            print('endDate: ${animeData['endDate']}');
-            print('season: ${animeData['season']}');
-            print('seasonYear: ${animeData['seasonYear']}');
-            print('bannerImage: ${animeData['bannerImage']}');
+            final recommendations = animeData['recommendations'];
 
+            // print('animedata from api : ${Licensor.fromJson(animeData['lc'])}');
             return SingleChildScrollView(
                 child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
@@ -83,7 +189,8 @@ class AnimeInfoPage extends StatelessWidget {
                       child:
                           // Image.asset('./asset/animebg.png', fit: BoxFit.cover)),
                           Image(
-                              image: NetworkImage(animeData['bannerImage'] ?? 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/154587-ivXNJ23SM1xB.jpg'),
+                              image: NetworkImage(animeData['bannerImage'] ??
+                                  'https://s4.anilist.co/file/anilistcdn/media/anime/banner/154587-ivXNJ23SM1xB.jpg'),
                               fit: BoxFit.cover)),
                   Padding(padding: EdgeInsets.only(top: 15)),
                   AnimeInfoHeader(
@@ -144,6 +251,36 @@ class AnimeInfoPage extends StatelessWidget {
                             color: Colors.grey,
                           ),
                         ),
+                        DropdownButton<String>(
+                          value: _selectedLicensorId,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedLicensorId = newValue;
+                              filterAndSortEpisodes();
+                            });
+                            // Optionally, perform an action based on the new selection, such as fetching data specific to the selected licensor
+                          },
+                          items: _licensors.map((licensor) {
+                            return DropdownMenuItem<String>(
+                              value: licensor.id,
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    licensor.icon,
+                                    width: 20,
+                                    height: 20,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(Icons.error_outline,
+                                          size: 20);
+                                    },
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(licensor.name)
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
                         Padding(padding: EdgeInsets.only(top: 15)),
                         Text(
                           'Episodes',
@@ -152,61 +289,65 @@ class AnimeInfoPage extends StatelessWidget {
                               fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: _filteredEpisodes.map((episode) {
+                            // Extract the episode stream URL.
+                            final String episodeStreamUrl =
+                                episode['streamURL'] ?? '';
+
+                            return GestureDetector(
+                              onTap: () async {
+                                if (await canLaunch(episodeStreamUrl)) {
+                                  await launch(episodeStreamUrl);
+                                } else {
+                                  // Handle the error or inform the user that the URL could not be opened.
+                                  print('Could not launch $episodeStreamUrl');
+                                }
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: 80,
+                                margin: EdgeInsets.only(
+                                    bottom:
+                                        10), // Add some space between each episode
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: NetworkImage(episode[
+                                            'thumbnailURL'] ??
+                                        ''), // Use a placeholder or default image if URL is null
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      bottom: 10,
+                                      left: 20,
+                                      child: Text(
+                                        'Episode ${episode['episodeNumber']}: ${episode['episodeName']}',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                         Padding(padding: EdgeInsets.only(top: 10)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Container(
-                                width: double.infinity,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    image: NetworkImage(animePoster),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                        bottom: 10,
-                                        left: 20,
-                                        child: Text(
-                                          'Episode 1',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                  ],
-                                )),
                             Padding(padding: EdgeInsets.only(top: 5)),
-                            Container(
-                                width: double.infinity,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    image: NetworkImage(animePoster),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                        bottom: 10,
-                                        left: 20,
-                                        child: Text(
-                                          'Episode 1',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                  ],
-                                )),
                           ],
                         ),
+                        Padding(padding: EdgeInsets.only(top: 5)),
                         Padding(padding: EdgeInsets.only(top: 15)),
                         Text(
                           'Characters',
@@ -239,7 +380,7 @@ class AnimeInfoPage extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
-                                        image: NetworkImage(animePoster),
+                                        image: NetworkImage(widget.animePoster),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -287,6 +428,29 @@ class AnimeInfoPage extends StatelessWidget {
                         ),
                         Padding(padding: EdgeInsets.only(top: 10)),
                         //anime card
+                        GridView.count(
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          crossAxisCount: 3,
+                          childAspectRatio: (1 / (300 / 150)),
+                          controller: ScrollController(keepScrollOffset: false),
+                          shrinkWrap: true,
+                          children: (animeData['recommendations']['nodes']
+                                  as List<dynamic>)
+                              .map<Widget>((animeData) {
+                            // Note the use of animeData['recommendations']['nodes'] to access the correct list
+                            return AnimeCard(
+                              animeId: animeData['id']
+                                  .toString(), // Ensuring id is treated as a string
+                              animeOriginalName:
+                                  '', // Assuming you have a reason to keep this blank
+                              animeEngName: animeData['title'],
+                              animePoster: animeData['coverImage'] ??
+                                  'path/to/your/placeholder/image.jpg', // Fallback to a placeholder image
+                              availablePlatform: 'netflix',
+                            );
+                          }).toList(), // Don't forget toList() to convert the result back into a List<Widget>
+                        )
                       ],
                     ),
                   )
