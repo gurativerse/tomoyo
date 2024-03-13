@@ -157,8 +157,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
           height: 130,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Color(ColorPalatte.color[
-                  'shadow']!), // Adjust according to your theme/color palette
+              color: Color(ColorPalatte.color['shadow']!),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(10.0),
@@ -168,8 +167,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
               Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Container(
-                  width: 90,
-                  height: 80,
+                  width: 120,
+                  height: 120,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
@@ -180,28 +179,27 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Text(
-                  characterName,
+                padding: const EdgeInsets.only(top: 10),
+                child: RichText(
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
+                  strutStyle: StrutStyle(fontSize: 12.0),
+                  text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                      text: characterName),
                 ),
               ),
-              // Add more widgets as needed
             ],
           ),
         ),
       );
-    }).toList(); // Ensure to call toList() to convert the iterable to a list
+    }).toList();
   }
 
-
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -218,11 +216,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
             final List<Licensor> licensors = (animeData['lc'] as List)
                 .map((lc) => Licensor.fromJson(lc))
                 .toList();
-
-            // Set the initial selected licensor ID, if not already set and licensors are available
             if (_selectedLicensorId == null && licensors.isNotEmpty) {
               _selectedLicensorId = licensors.first.id;
-              // Note: We avoid calling setState here as we're in the build method
             }
             final animeDescription = animeData['description']
                 .replaceAll("<br>", "")
@@ -247,12 +242,10 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(0),
                       ),
-                      child:
-                          // Image.asset('./asset/animebg.png', fit: BoxFit.cover)),
-                          Image(
-                              image: NetworkImage(animeData['bannerImage'] ??
-                                  'https://s4.anilist.co/file/anilistcdn/media/anime/banner/154587-ivXNJ23SM1xB.jpg'),
-                              fit: BoxFit.cover)),
+                      child: Image(
+                          image: NetworkImage(animeData['bannerImage'] ??
+                              'https://s4.anilist.co/file/anilistcdn/media/anime/banner/154587-ivXNJ23SM1xB.jpg'),
+                          fit: BoxFit.cover)),
                   Padding(padding: EdgeInsets.only(top: 15)),
                   AnimeInfoHeader(
                     animeId: animeData['id'].toString(),
@@ -312,6 +305,15 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                             color: Colors.grey,
                           ),
                         ),
+                        Padding(padding: EdgeInsets.only(top: 20)),
+                        Text(
+                          'Episodes',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 5)),
                         DropdownButton<String>(
                           value: _selectedLicensorId,
                           onChanged: (String? newValue) {
@@ -319,7 +321,6 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               _selectedLicensorId = newValue;
                               filterAndSortEpisodes();
                             });
-                            // Optionally, perform an action based on the new selection, such as fetching data specific to the selected licensor
                           },
                           items: _licensors.map((licensor) {
                             return DropdownMenuItem<String>(
@@ -342,18 +343,10 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                             );
                           }).toList(),
                         ),
-                        Padding(padding: EdgeInsets.only(top: 15)),
-                        Text(
-                          'Episodes',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
-                        ),
+                        Padding(padding: EdgeInsets.only(top: 5)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: _filteredEpisodes.map((episode) {
-                            // Extract the episode stream URL.
                             final String episodeStreamUrl =
                                 episode['streamURL'] ?? '';
 
@@ -362,22 +355,18 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                 if (await canLaunch(episodeStreamUrl)) {
                                   await launch(episodeStreamUrl);
                                 } else {
-                                  // Handle the error or inform the user that the URL could not be opened.
                                   print('Could not launch $episodeStreamUrl');
                                 }
                               },
                               child: Container(
                                 width: double.infinity,
                                 height: 80,
-                                margin: EdgeInsets.only(
-                                    bottom:
-                                        10), // Add some space between each episode
+                                margin: EdgeInsets.only(bottom: 10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
-                                    image: NetworkImage(episode[
-                                            'thumbnailURL'] ??
-                                        ''), // Use a placeholder or default image if URL is null
+                                    image: NetworkImage(
+                                        episode['thumbnailURL'] ?? ''),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -401,27 +390,24 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                             );
                           }).toList(),
                         ),
-                        Padding(padding: EdgeInsets.only(top: 10)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(padding: EdgeInsets.only(top: 5)),
-                          ],
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 5)),
                         Padding(padding: EdgeInsets.only(top: 15)),
                         Text(
-                          'Characters',
+                          'Main Characters',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(padding: EdgeInsets.only(top: 10)),
-                        Column(
-                          children: buildCharacterWidgets(mainCharacters),
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 15)),
+                        GridView.count(
+                            crossAxisSpacing: 0,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 2,
+                            childAspectRatio: (1 / (120 / 120)),
+                            controller:
+                                ScrollController(keepScrollOffset: false),
+                            shrinkWrap: true,
+                            children: buildCharacterWidgets(mainCharacters)),
                         Text(
                           'Related anime',
                           style: TextStyle(
@@ -430,7 +416,6 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(padding: EdgeInsets.only(top: 10)),
-                        //anime card
                         GridView.count(
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
@@ -441,18 +426,15 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                           children: (animeData['recommendations']['nodes']
                                   as List<dynamic>)
                               .map<Widget>((animeData) {
-                            // Note the use of animeData['recommendations']['nodes'] to access the correct list
                             return AnimeCard(
-                              animeId: animeData['id']
-                                  .toString(), // Ensuring id is treated as a string
-                              animeOriginalName:
-                                  '', // Assuming you have a reason to keep this blank
+                              animeId: animeData['id'].toString(),
+                              animeOriginalName: '',
                               animeEngName: animeData['title'],
                               animePoster: animeData['coverImage'] ??
-                                  'path/to/your/placeholder/image.jpg', // Fallback to a placeholder image
+                                  'path/to/your/placeholder/image.jpg',
                               availablePlatform: 'netflix',
                             );
-                          }).toList(), // Don't forget toList() to convert the result back into a List<Widget>
+                          }).toList(),
                         )
                       ],
                     ),
