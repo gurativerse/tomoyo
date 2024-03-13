@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
+import '../theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,7 +14,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xFFFDFDFC),
+          backgroundColor: Color(ColorPalatte.color['base']!),
         ),
         body: Column(children: [
           Padding(padding: EdgeInsets.symmetric(vertical: 20)),
@@ -29,7 +30,7 @@ class LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(width: 8),
                 Text('Sign up',
-                    style: TextStyle(color: Color(0XFFEA4958), fontSize: 16)),
+                    style: TextStyle(color: Color(ColorPalatte.color['button']!), fontSize: 16)),
               ],
             ),
           ),
@@ -56,7 +57,7 @@ class LoginPageState extends State<LoginPage> {
                                 vertical: 12, horizontal: 16),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide(color: Color(0xFFD7D3D0)),
+                              borderSide: BorderSide(color: Color(ColorPalatte.color['line']!)),
                             ),
                           ),
                           validator: (String? value) {
@@ -88,7 +89,7 @@ class LoginPageState extends State<LoginPage> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                   borderSide:
-                                      BorderSide(color: Color(0xFFD7D3D0)),
+                                      BorderSide(color: Color(ColorPalatte.color['line']!)),
                                 ),
                               ),
                               validator: (String? value) {
@@ -115,7 +116,8 @@ class LoginPageState extends State<LoginPage> {
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0XFFEA4958)),
+                  MaterialStateProperty.all<Color>(
+                  Color(ColorPalatte.color['button']!)),
             ),
             onPressed: () {
               Navigator.pushReplacement(
