@@ -6,7 +6,7 @@ import '../theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
-Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
+Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
   final response = await http.get(
       Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/info/$animeId'));
 
@@ -89,7 +89,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   }
 
   void fetchInitialData() async {
-    final animeInfo = await fetchAnimeId(widget.animeId);
+    final animeInfo = await fetchAnimeInfo(widget.animeId);
     final episodeData = await fetchEpisodeInfo(widget.animeId);
 
     if (animeInfo['lc'] != null && animeInfo['lc'].isNotEmpty) {
@@ -202,7 +202,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
         backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchAnimeId(widget.animeId),
+        future: fetchAnimeInfo(widget.animeId),
         builder: (context, snapshot) {
           if (_isLoading) {
             return Center(child: CircularProgressIndicator());
@@ -249,7 +249,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                     animeOriginalName:
                         animeData['title']['native'] as String? ?? '',
                     animeEngName:
-                        animeData['title']['english'] as String? ?? '',
+                        animeData['title']['english'] as String? ?? animeData['title']['romaji'],
                     animePoster:
                         animeData['coverImage']['extraLarge'] as String? ?? '',
                     availablePlatform: 'netflix',
@@ -479,7 +479,7 @@ class AnimeInfoHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
-        future: fetchAnimeId(animeId),
+        future: fetchAnimeInfo(animeId),
         builder: (context, snapshot) {
           var formattedDateRange;
           if (startDate == null ||

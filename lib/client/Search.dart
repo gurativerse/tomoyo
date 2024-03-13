@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
 import '../shared/SearchCard.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -11,67 +13,120 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-class SearchPageContent extends StatelessWidget {
+class SearchPageContent extends StatefulWidget {
+  @override
+  _SearchPageContentState createState() => _SearchPageContentState();
+}
+
+class _SearchPageContentState extends State<SearchPageContent> {
+  List searchResults = [];
+  TextEditingController _controller = TextEditingController();
+  bool _isLoading = false;
+
+  Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
+    final response = await http.get(
+        Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/info/$animeId'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['data'];
+    } else {
+      throw Exception('Failed to load anime info');
+    }
+  }
+
+  Future<void> searchAnime(query) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final response = await http.get(
+        Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/search/$query'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final ids = data['data'] as List<dynamic>;
+
+      final detailsFutures = ids.map((id) => fetchAnimeInfo(id)).toList();
+      final detailsResults = await Future.wait(detailsFutures);
+      setState(() {
+        searchResults = detailsResults;
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      throw Exception('Failed to load anime info');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: SingleChildScrollView(
-              child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 280,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Color(0XFFD7D3D0)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10),
-                                border: InputBorder.none,
-                              ),
+            child: SingleChildScrollView(
+                child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 280,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0XFFD7D3D0)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _controller,
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 10),
+                              border: InputBorder.none,
                             ),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color(ColorPalatte.color['button']!)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      onPressed: () => searchAnime(_controller.text),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                        child: Icon(
+                          Icons.manage_search,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(ColorPalatte.color['button']!)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Icon(
-                              Icons.manage_search,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+              if (_isLoading) // Display loading indicator when searching
+                Center(
+                  child: CircularProgressIndicator(),
+                )
+              else
                 Container(
                   width: double.infinity,
                   child: Padding(
@@ -84,7 +139,7 @@ class SearchPageContent extends StatelessWidget {
                             text: 'result from searching anime ',
                           ),
                           TextSpan(
-                            text: '5',
+                            text: searchResults.length.toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -97,17 +152,26 @@ class SearchPageContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: 10)),
-                SearchCard(
-                    animeId: '1',
-                    animeOriginalName: '1',
-                    animeEngName: '1',
-                    animePoster: 'animePoster',
-                    availablePlatform: 'availablePlatform')
-              ],
-            ),
-          )),
-        ),
+              Padding(padding: EdgeInsets.only(top: 10)),
+              Column(
+                children: searchResults.map((anime) {
+                  print(anime);
+                  return SearchCard(
+                    animeId: anime['id'],
+                    animeEngName: anime['title']['english'] ??
+                        anime['title']['romaji'].toString(),
+                    animeOriginalName: anime['title']['native']?.toString() ??
+                        anime['title']['romaji'].toString(),
+                    animePoster: anime['coverImage']['large'].toString(),
+                    availablePlatform: 'netflix',
+                    animeDescription: anime['description'].toString(),
+                    lc: anime['lc'],
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        )))
       ],
     );
   }

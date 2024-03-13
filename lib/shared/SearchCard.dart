@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import '../theme.dart';
 import '../client/AnimeInfo.dart';
 
@@ -8,18 +9,29 @@ class SearchCard extends StatelessWidget {
   final String animeEngName;
   final String animePoster;
   final String availablePlatform;
+  final String animeDescription;
+  final List lc;
 
-  const SearchCard({
-    Key? key,
-    required this.animeId,
-    required this.animeOriginalName,
-    required this.animeEngName,
-    required this.animePoster,
-    required this.availablePlatform,
-  }) : super(key: key);
+  const SearchCard(
+      {Key? key,
+      required this.animeId,
+      required this.animeOriginalName,
+      required this.animeEngName,
+      required this.animePoster,
+      required this.availablePlatform,
+      required this.animeDescription,
+      required this.lc})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var description = animeDescription
+        .toString()
+        .replaceAll("<br>", "")
+        .replaceAll("\\n", "")
+        .replaceAll("<i>", "")
+        .replaceAll("</i>", "");
+
     return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -83,25 +95,19 @@ class SearchCard extends StatelessWidget {
                               fontSize: 10,
                               color: Colors.black,
                               fontWeight: FontWeight.w200),
-                          text:
-                              'อิตาโดริ ยูจิ นักเรียนมัธยมปลายที่มีสมรรถภาพทางร่างกายสูง วันหนึ่งเขาได้กลืนนิ้วต้องคำสาปเข้าไป “นิ้วเทพอสูรเรียวเมนสุคุนะ” เพื่อช่วยรุ่นพี่จาก “วัตถุต้องคำสาป” ทำให้คำสาป “สุคุนะ”กลายเป็นส่วนหนึ่งของเขา หลังจากนั้นเขาก็ได้เข้าโรงเรียนไสยเวทย์ เพื่อทำให้คำพูดสุดท้ายของคุณปู่ “จงช่วยเหลือผู้อื่น” เป็นจริง ยูจิจึงไม่หยุดที่จะต่อสู้กับ “คำสาป”',
+                          text: description,
                         ),
                       ),
                       SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image.asset(
-                            'asset/netflix.png',
-                            width: 30,
-                          ),
-                          Image.asset(
-                            'asset/billibilli.png',
-                            width: 30,
-                          ),
-                          Image.asset(
-                            'asset/wetv.png',
-                            width: 30,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Image.network(
+                              lc[0]['icon'].toString(),
+                              width: 30,
+                            ), // Or Image.asset for local assets
                           ),
                           TextButton(
                             style: ButtonStyle(
