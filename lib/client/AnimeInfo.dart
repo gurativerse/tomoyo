@@ -55,6 +55,20 @@ class AnimeInfoPage extends StatelessWidget {
                 .replaceAll("<i>", "")
                 .replaceAll("</i>", "");
 
+            print('animeId: ${animeData['id']}');
+            print('animeOriginalName: ${animeData['title']['native']}');
+            print('animeEngName: ${animeData['title']['english']}');
+            print('animePoster: ${animeData['coverImage']['extraLarge']}');
+            print('availablePlatform: netflix');
+            print('status: ${animeData['status']}');
+            print(
+                'genre: ${animeData['genres'] != null ? animeData['genres'][0] : 'N/A'}');
+            print('startDate: ${animeData['startDate']}');
+            print('endDate: ${animeData['endDate']}');
+            print('season: ${animeData['season']}');
+            print('seasonYear: ${animeData['seasonYear']}');
+            print('bannerImage: ${animeData['bannerImage']}');
+
             return SingleChildScrollView(
                 child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
@@ -67,24 +81,31 @@ class AnimeInfoPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child:
-                          // Image.asset('./asset/animebg.png', fit: BoxFit.cover),
+                          // Image.asset('./asset/animebg.png', fit: BoxFit.cover)),
                           Image(
-                              image: NetworkImage(animeData['bannerImage']),
+                              image: NetworkImage(animeData['bannerImage'] ?? 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/154587-ivXNJ23SM1xB.jpg'),
                               fit: BoxFit.cover)),
                   Padding(padding: EdgeInsets.only(top: 15)),
                   AnimeInfoHeader(
-                      animeId: animeData['id'],
-                      animeOriginalName: animeData['title']['native'],
-                      animeEngName: animeData['title']['english'],
-                      animePoster: animeData['coverImage']['extraLarge'],
-                      availablePlatform: 'netflix',
-                      status: animeData['status'],
-                      genre: animeData['genres'][0],
-                      startDate: animeData['startDate'],
-                      endDate: animeData['endDate'],
-                      season: animeData['season'],
-                      seasonYear: animeData['seasonYear'],
-                      bannerImage: animeData['bannerImage']),
+                    animeId: animeData['id'].toString(),
+                    animeOriginalName:
+                        animeData['title']['native'] as String? ?? '',
+                    animeEngName:
+                        animeData['title']['english'] as String? ?? '',
+                    animePoster:
+                        animeData['coverImage']['extraLarge'] as String? ?? '',
+                    availablePlatform: 'netflix',
+                    status: animeData['status'] as String? ?? '',
+                    genre: (animeData['genres'] as List<dynamic>?)
+                            ?.first
+                            .toString() ??
+                        'N/A',
+                    startDate: animeData['startDate'],
+                    endDate: animeData['endDate'],
+                    season: animeData['season'] as String? ?? 'N/A',
+                    seasonYear: animeData['seasonYear'].toString(),
+                    bannerImage: animeData['bannerImage'],
+                  ),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
                     child: Column(
@@ -304,7 +325,7 @@ class AnimeInfoHeader extends StatelessWidget {
       required this.genre,
       required this.season,
       required this.seasonYear,
-      required this.bannerImage,
+      this.bannerImage,
       this.startDate,
       this.endDate})
       : super(key: key);
