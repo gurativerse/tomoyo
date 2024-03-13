@@ -143,7 +143,65 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     }
   }
 
+  List<Widget> buildCharacterWidgets(List<dynamic> characters) {
+    return characters.map<Widget>((character) {
+      var characterNode = character['node'];
+      var characterName = characterNode['name']['userPreferred'];
+      var characterImageUrl = characterNode['image']['large'];
+
+      return Card(
+        elevation: 0,
+        color: Colors.transparent,
+        child: Container(
+          width: 130,
+          height: 130,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color(ColorPalatte.color[
+                  'shadow']!), // Adjust according to your theme/color palette
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Container(
+                  width: 90,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: NetworkImage(characterImageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(
+                  characterName,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              // Add more widgets as needed
+            ],
+          ),
+        ),
+      );
+    }).toList(); // Ensure to call toList() to convert the iterable to a list
+  }
+
+
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -172,9 +230,12 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 .replaceAll("<i>", "")
                 .replaceAll("</i>", "");
 
-            final recommendations = animeData['recommendations'];
+            final characterEdges = animeData['characterPreview']['edges'];
 
-            // print('animedata from api : ${Licensor.fromJson(animeData['lc'])}');
+            final mainCharacters = characterEdges.where((character) {
+              return character['role'] == 'MAIN';
+            }).toList();
+
             return SingleChildScrollView(
                 child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
@@ -357,66 +418,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(padding: EdgeInsets.only(top: 10)),
-                        Card(
-                          elevation: 0,
-                          color: Colors.transparent,
-                          child: Container(
-                            width: 130,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Color(ColorPalatte.color['shadow']!),
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10),
-                                  child: Container(
-                                    width: 90,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.animePoster),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    strutStyle: StrutStyle(fontSize: 12.0),
-                                    text: TextSpan(
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
-                                        text: 'Satoru'),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 2),
-                                  child: RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    strutStyle: StrutStyle(fontSize: 12.0),
-                                    text: TextSpan(
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: Color(
-                                              ColorPalatte.color['shadow']!),
-                                        ),
-                                        text: 'Main character'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        Column(
+                          children: buildCharacterWidgets(mainCharacters),
                         ),
                         Padding(padding: EdgeInsets.only(top: 15)),
                         Text(
@@ -614,7 +617,9 @@ class AnimeInfoHeader extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Finished Airing',
+                            status == 'RELEASING'
+                                ? 'Currently Airing'
+                                : 'Finished Airing',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,
