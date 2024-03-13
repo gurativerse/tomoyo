@@ -3,7 +3,7 @@ import '../theme.dart';
 import '../client/AnimeInfo.dart';
 
 class AnimeCard extends StatelessWidget {
-  final animeId;
+  final String animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;

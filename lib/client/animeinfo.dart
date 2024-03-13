@@ -18,7 +18,7 @@ Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
 }
 
 class AnimeInfoPage extends StatelessWidget {
-  final int animeId;
+  final String animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
@@ -189,7 +189,7 @@ class AnimeInfoPage extends StatelessWidget {
 }
 
 class AnimeInfoHeader extends StatelessWidget {
-  final int animeId;
+  final String animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
