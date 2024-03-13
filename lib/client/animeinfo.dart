@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../theme.dart';
@@ -18,7 +17,7 @@ Future<Map<String, dynamic>> fetchAnimeId(animeId) async {
 }
 
 class AnimeInfoPage extends StatelessWidget {
-  final String animeId;
+  final animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
@@ -123,8 +122,6 @@ class AnimeInfoPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.grey,
                           ),
-                          // child: Image.asset('./asset/reccommendex.png',
-                          //     fit: BoxFit.cover),
                         ),
                         Padding(padding: EdgeInsets.only(top: 15)),
                         Text(
@@ -163,7 +160,101 @@ class AnimeInfoPage extends StatelessWidget {
                                   ],
                                 )),
                             Padding(padding: EdgeInsets.only(top: 5)),
+                            Container(
+                                width: double.infinity,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: NetworkImage(animePoster),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        bottom: 10,
+                                        left: 20,
+                                        child: Text(
+                                          'Episode 1',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                  ],
+                                )),
                           ],
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 15)),
+                        Text(
+                          'Characters',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Card(
+                          elevation: 0,
+                          color: Colors.transparent,
+                          child: Container(
+                            width: 130,
+                            height: 130,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(ColorPalatte.color['shadow']!),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Container(
+                                    width: 90,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        image: NetworkImage(animePoster),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    strutStyle: StrutStyle(fontSize: 12.0),
+                                    text: TextSpan(
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                        text: 'Satoru'),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    strutStyle: StrutStyle(fontSize: 12.0),
+                                    text: TextSpan(
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Color(
+                                              ColorPalatte.color['shadow']!),
+                                        ),
+                                        text: 'Main character'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         Padding(padding: EdgeInsets.only(top: 15)),
                         Text(
@@ -189,7 +280,7 @@ class AnimeInfoPage extends StatelessWidget {
 }
 
 class AnimeInfoHeader extends StatelessWidget {
-  final String animeId;
+  final animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
@@ -198,9 +289,9 @@ class AnimeInfoHeader extends StatelessWidget {
   final String genre;
   final startDate;
   final endDate;
-  final String season;
-  final String seasonYear;
-  final String bannerImage;
+  final season;
+  final seasonYear;
+  final bannerImage;
 
   const AnimeInfoHeader(
       {Key? key,
