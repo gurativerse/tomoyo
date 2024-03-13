@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
+import '../shared/SearchCard.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -71,6 +72,38 @@ class SearchPageContent extends StatelessWidget {
                         )),
                   ],
                 ),
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10, left: 12),
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(fontSize: 12, color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: 'result from searching anime ',
+                          ),
+                          TextSpan(
+                            text: '5',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' series',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(top: 10)),
+                SearchCard(
+                    animeId: '1',
+                    animeOriginalName: '1',
+                    animeEngName: '1',
+                    animePoster: 'animePoster',
+                    availablePlatform: 'availablePlatform')
               ],
             ),
           )),

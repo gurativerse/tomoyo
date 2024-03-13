@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../client/AnimeInfo.dart';
 
-class AnimeCard extends StatelessWidget {
+class SearchCard extends StatelessWidget {
   final animeId;
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
   final String availablePlatform;
 
-  const AnimeCard({
+  const SearchCard({
     Key? key,
     required this.animeId,
     required this.animeOriginalName,
