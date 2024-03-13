@@ -155,7 +155,6 @@ class _SearchPageContentState extends State<SearchPageContent> {
               Padding(padding: EdgeInsets.only(top: 10)),
               Column(
                 children: searchResults.map((anime) {
-                  print(anime);
                   return SearchCard(
                     animeId: anime['id'],
                     animeEngName: anime['title']['english'] ??
