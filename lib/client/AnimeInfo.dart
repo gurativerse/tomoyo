@@ -100,14 +100,13 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       setState(() {
         _licensors = licensors;
         _selectedLicensorId =
-            initialLicensorId; // Set the first licensor's ID as selected by default
+            initialLicensorId; 
         _episodes = episodeData;
         _isLoading = false;
       });
 
-      filterAndSortEpisodes(); // Ensure this is called here to immediately filter episodes based on the initial selection
+      filterAndSortEpisodes(); 
     } else {
-      // Handle the case where there are no licensors
       setState(() {
         _episodes = episodeData;
       });
@@ -115,12 +114,10 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   }
 
   void filterAndSortEpisodes() {
-    // Assuming episodes have a 'lcID' field that is a string and matches the selected licensor's id.
     setState(() {
       _filteredEpisodes = _episodes
           .where((episode) => episode['lcID'].toString() == _selectedLicensorId)
           .toList();
-      // Sort if necessary, assuming there is an 'episodeNumber' field to sort by.
       _filteredEpisodes.sort((a, b) => int.parse(a['episodeNumber'].toString())
           .compareTo(int.parse(b['episodeNumber'].toString())));
     });
@@ -366,7 +363,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                        episode['thumbnailURL'] ?? ''),
+                                        episode['thumbnailURL'] ?? 'https://m1r.ai/9/1r5d5.webp'),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
