@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tomoyo/shared/splash.dart';
 import 'theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

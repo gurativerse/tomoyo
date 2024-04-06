@@ -5,10 +5,12 @@ import 'package:tomoyo/shared/AnimeCard.dart';
 import '../theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
+  final apiUrl = dotenv.env['API_URL'];
   final response = await http.get(
-      Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/info/$animeId'));
+      Uri.parse('$apiUrl/v1/animes/info/$animeId'));
 
   if (response.statusCode == 200) {
     return jsonDecode(
@@ -19,8 +21,8 @@ Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
 }
 
 Future<List<dynamic>> fetchEpisodeInfo(animeId) async {
-  final response = await http.get(
-      Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/episode/$animeId'));
+  final apiUrl = dotenv.env['API_URL'];
+  final response = await http.get(Uri.parse('$apiUrl/v1/animes/episode/$animeId'));
 
   if (response.statusCode == 200) {
     // Assuming the 'data' key contains a list of episodes

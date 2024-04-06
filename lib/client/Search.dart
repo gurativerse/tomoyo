@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
 import '../shared/SearchCard.dart';
@@ -24,8 +25,9 @@ class _SearchPageContentState extends State<SearchPageContent> {
   bool _isLoading = false;
 
   Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
-    final response = await http.get(
-        Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/info/$animeId'));
+    final apiUrl = dotenv.env['API_URL'];
+    final response =
+        await http.get(Uri.parse('$apiUrl/v1/animes/info/$animeId'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['data'];
@@ -39,8 +41,9 @@ class _SearchPageContentState extends State<SearchPageContent> {
       _isLoading = true;
     });
 
-    final response = await http.get(
-        Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/search/$query'));
+    final apiUrl = dotenv.env['API_URL'];
+    final response =
+        await http.get(Uri.parse('$apiUrl/v1/animes/search/$query'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

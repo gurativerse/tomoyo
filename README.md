@@ -5,3 +5,6 @@ This is the repository for the development of Tomoyo, a mobile application for s
 1. 6488083 Kanyanut Sompong
 2. 6488103 Panyaporn Wattanapong
 3. 6488148 Pattanun Worakitsitthisatorn
+
+# Regarding project's .env
+If you need to run the project and need the .env file, please contact the team members.

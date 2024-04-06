@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../theme.dart';
 import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
@@ -84,8 +85,9 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
   String selectedDay = DateFormat('EEEE').format(DateTime.now());
 
   Future<List<dynamic>> fetchAnimeList(String day) async {
+    final apiUrl = dotenv.env['API_URL'];
     final response = await http
-        .get(Uri.parse('https://tomoyo-api.30052565.xyz/v1/animes/calendar'));
+        .get(Uri.parse('$apiUrl/v1/animes/calendar'));
 
     if (response.statusCode == 200) {
       List<dynamic> allAnimes = jsonDecode(response.body)['data'];
