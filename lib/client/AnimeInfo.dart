@@ -9,8 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
   final apiUrl = dotenv.env['API_URL'];
-  final response = await http.get(
-      Uri.parse('$apiUrl/v1/animes/info/$animeId'));
+  final response = await http.get(Uri.parse('$apiUrl/v1/animes/info/$animeId'));
 
   if (response.statusCode == 200) {
     return jsonDecode(
@@ -22,7 +21,8 @@ Future<Map<String, dynamic>> fetchAnimeInfo(animeId) async {
 
 Future<List<dynamic>> fetchEpisodeInfo(animeId) async {
   final apiUrl = dotenv.env['API_URL'];
-  final response = await http.get(Uri.parse('$apiUrl/v1/animes/episode/$animeId'));
+  final response =
+      await http.get(Uri.parse('$apiUrl/v1/animes/episode/$animeId'));
 
   if (response.statusCode == 200) {
     // Assuming the 'data' key contains a list of episodes
@@ -101,13 +101,12 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
 
       setState(() {
         _licensors = licensors;
-        _selectedLicensorId =
-            initialLicensorId; 
+        _selectedLicensorId = initialLicensorId;
         _episodes = episodeData;
         _isLoading = false;
       });
 
-      filterAndSortEpisodes(); 
+      filterAndSortEpisodes();
     } else {
       setState(() {
         _episodes = episodeData;
@@ -250,8 +249,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                     animeId: animeData['id'].toString(),
                     animeOriginalName:
                         animeData['title']['native'] as String? ?? '',
-                    animeEngName:
-                        animeData['title']['english'] as String? ?? animeData['title']['romaji'],
+                    animeEngName: animeData['title']['english'] as String? ??
+                        animeData['title']['romaji'],
                     animePoster:
                         animeData['coverImage']['extraLarge'] as String? ?? '',
                     availablePlatform: 'netflix',
@@ -365,7 +364,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                        episode['thumbnailURL'] ?? 'https://m1r.ai/9/1r5d5.webp'),
+                                        episode['thumbnailURL'] ??
+                                            'https://m1r.ai/9/1r5d5.webp'),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -553,76 +553,55 @@ class AnimeInfoHeader extends StatelessWidget {
                 ],
               ),
               Padding(padding: EdgeInsets.only(left: 20)),
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        overflow: TextOverflow.ellipsis,
-                        strutStyle: StrutStyle(fontSize: 12.0),
-                        textAlign: TextAlign.left,
-                        softWrap: true,
-                        maxLines: 2,
-                        text: TextSpan(
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            text: animeEngName),
-                      ),
-                      SizedBox(height: 2),
-                      RichText(
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        strutStyle: StrutStyle(fontSize: 12.0),
-                        textAlign: TextAlign.left,
-                        text: TextSpan(
-                          style: TextStyle(
-                            color: Color(ColorPalatte.color['shadow']!),
-                            fontSize: 12,
-                          ),
-                          text: animeOriginalName,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Column(
+              Expanded(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Airing',
-                            style: TextStyle(
-                              color: Color(ColorPalatte.color['shadow']!),
-                              fontSize: 12,
+                          RichText(
+                            overflow: TextOverflow.ellipsis,
+                            strutStyle: StrutStyle(fontSize: 12.0),
+                            textAlign: TextAlign.left,
+                            softWrap: true,
+                            maxLines: 2,
+                            text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                                text: animeEngName),
+                          ),
+                          SizedBox(height: 2),
+                          RichText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            strutStyle: StrutStyle(fontSize: 12.0),
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                              style: TextStyle(
+                                color: Color(ColorPalatte.color['shadow']!),
+                                fontSize: 12,
+                              ),
+                              text: animeOriginalName,
                             ),
                           ),
-                          Text(
-                            status == 'RELEASING'
-                                ? 'Currently Airing'
-                                : 'Finished Airing',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        children: [
+                          SizedBox(height: 5),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Genre',
+                                'Airing',
                                 style: TextStyle(
                                   color: Color(ColorPalatte.color['shadow']!),
                                   fontSize: 12,
                                 ),
                               ),
                               Text(
-                                genre,
+                                status == 'RELEASING'
+                                    ? 'Currently Airing'
+                                    : 'Finished Airing',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12,
@@ -630,19 +609,85 @@ class AnimeInfoHeader extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(width: 15),
+                          SizedBox(height: 5),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Genre',
+                                    style: TextStyle(
+                                      color:
+                                          Color(ColorPalatte.color['shadow']!),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Text(
+                                    genre,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 15),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Status',
+                                    style: TextStyle(
+                                      color:
+                                          Color(ColorPalatte.color['shadow']!),
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  Text(
+                                    status,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Status',
+                                'Original run',
                                 style: TextStyle(
                                   color: Color(ColorPalatte.color['shadow']!),
                                   fontSize: 12,
                                 ),
                               ),
                               Text(
-                                status,
+                                formattedDateRange,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Season',
+                                style: TextStyle(
+                                  color: Color(ColorPalatte.color['shadow']!),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                '$season $seasonYear',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12,
@@ -651,49 +696,7 @@ class AnimeInfoHeader extends StatelessWidget {
                             ],
                           ),
                         ],
-                      ),
-                      SizedBox(height: 5),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Original run',
-                            style: TextStyle(
-                              color: Color(ColorPalatte.color['shadow']!),
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            formattedDateRange,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Season',
-                            style: TextStyle(
-                              color: Color(ColorPalatte.color['shadow']!),
-                              fontSize: 12,
-                            ),
-                          ),
-                          Text(
-                            '$season $seasonYear',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ))
+                      )))
             ],
           );
         });

@@ -74,7 +74,7 @@ class SearchCard extends StatelessWidget {
                       Text(
                         animeEngName,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -94,7 +94,7 @@ class SearchCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 10,
                               color: Colors.black,
-                              fontWeight: FontWeight.w200),
+                              fontWeight: FontWeight.normal),
                           text: description,
                         ),
                       ),

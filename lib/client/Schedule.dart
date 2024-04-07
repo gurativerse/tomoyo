@@ -86,8 +86,7 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
 
   Future<List<dynamic>> fetchAnimeList(String day) async {
     final apiUrl = dotenv.env['API_URL'];
-    final response = await http
-        .get(Uri.parse('$apiUrl/v1/animes/calendar'));
+    final response = await http.get(Uri.parse('$apiUrl/v1/animes/calendar'));
 
     if (response.statusCode == 200) {
       List<dynamic> allAnimes = jsonDecode(response.body)['data'];
@@ -152,20 +151,21 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
                       return GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          childAspectRatio: (1 / (300 / 150)),
+                          childAspectRatio: (1 / (300 / 145)),
                         ),
                         controller: ScrollController(keepScrollOffset: false),
                         shrinkWrap: true,
                         itemCount: snapshot.data?.length ?? 0,
                         itemBuilder: (context, index) {
                           var animeData = snapshot.data![index]['media'];
-                          var coverImage = animeData['coverImage']['extraLarge'];
+                          var coverImage =
+                              animeData['coverImage']['extraLarge'];
                           return AnimeCard(
                             animeId: animeData['id'],
                             animeOriginalName: animeData['jpName'],
                             animeEngName: animeData['name'],
                             animePoster: coverImage,
-                            availablePlatform: "Netflix",
+                            availablePlatform: 'netflix',
                           );
                         },
                       );

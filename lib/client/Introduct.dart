@@ -72,18 +72,18 @@ class IntroPageTemplate extends StatelessWidget {
     return (Column(
       children: [
         Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-        Center(child: Image.asset(data['image'] ?? '', height: 500)),
+        Center(child: Image.asset(data['image'] ?? '', height: 450)),
         Padding(padding: EdgeInsets.symmetric(vertical: 20)),
         Container(
           width: 300,
           child: Text(
             data['description'] ?? '',
             style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
+                color: Colors.black, fontWeight: FontWeight.w700, fontSize: MediaQuery.of(context).size.width / 30),
             textAlign: TextAlign.center,
           ),
         ),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+        Padding(padding: EdgeInsets.symmetric(vertical: 20)),
         if (finalPage)
           TextButton(
             style: ButtonStyle(
@@ -95,7 +95,7 @@ class IntroPageTemplate extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LoginPage()));
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 25),
               child: Text(
                 'JOIN US',
                 style: TextStyle(

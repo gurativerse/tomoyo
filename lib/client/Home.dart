@@ -86,10 +86,10 @@ class _HomePageContentState extends State<HomePageContent> {
                       } else if (snapshot.hasData) {
                         final animeList = snapshot.data as List<dynamic>;
                         return GridView.count(
-                          crossAxisSpacing: 10,
+                          crossAxisSpacing: 5,
                           mainAxisSpacing: 10,
                           crossAxisCount: 3,
-                          childAspectRatio: (1 / (300 / 150)),
+                          childAspectRatio: (1 / (300 / 145)),
                           controller: ScrollController(keepScrollOffset: false),
                           shrinkWrap: true,
                           children: animeList.map((animeData) {
