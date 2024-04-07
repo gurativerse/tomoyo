@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tomoyo/client/Favourite.dart';
 import 'package:tomoyo/client/Login.dart';
+import 'package:tomoyo/client/Policy.dart';
+import 'package:tomoyo/client/Profile.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
 
@@ -28,7 +31,12 @@ class MorePageContent extends StatelessWidget {
                       Text('Account'),
                       Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Profile()));
+                          },
                           child: Container(
                               width: double.infinity,
                               height: 80,
@@ -73,7 +81,10 @@ class MorePageContent extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(top: 8)),
                   GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Favourite()));
+                      },
                       child: Container(
                           width: double.infinity,
                           height: 60,
@@ -104,7 +115,8 @@ class MorePageContent extends StatelessWidget {
                       Text('Option'),
                       Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                          },
                           child: Container(
                               width: double.infinity,
                               height: 60,
@@ -133,7 +145,10 @@ class MorePageContent extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(top: 8)),
                   GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Policy()));
+                      },
                       child: Container(
                           width: double.infinity,
                           height: 60,
