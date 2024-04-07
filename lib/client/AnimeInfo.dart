@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tomoyo/shared/AnimeCard.dart';
+import 'package:tomoyo/shared/VideoPlayer.dart';
+import 'package:video_player/video_player.dart';
 import '../theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -294,15 +296,9 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(padding: EdgeInsets.only(top: 10)),
-                        Container(
-                          width: double.infinity,
-                          height: 200,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey,
-                          ),
-                        ),
+                        YouTubePlayerScreen(
+                            videolink:
+                                'https://www.youtube.com/watch?v=YvGSK8mIlt8'),
                         Padding(padding: EdgeInsets.only(top: 20)),
                         Text(
                           'Episodes',
@@ -419,7 +415,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                           crossAxisCount: 3,
-                          childAspectRatio: (1 / (300 / 150)),
+                          childAspectRatio: (1 / (300 / 140)),
                           controller: ScrollController(keepScrollOffset: false),
                           shrinkWrap: true,
                           children: (animeData['recommendations']['nodes']
