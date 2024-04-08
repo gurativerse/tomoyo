@@ -165,7 +165,7 @@ class _SearchPageContentState extends State<SearchPageContent> {
                     animeOriginalName: anime['title']['native']?.toString() ??
                         anime['title']['romaji'].toString(),
                     animePoster: anime['coverImage']['large'].toString(),
-                    availablePlatform: 'netflix',
+                    availablePlatform: anime['lc'][0],
                     animeDescription: anime['description'].toString(),
                     lc: anime['lc'],
                   );

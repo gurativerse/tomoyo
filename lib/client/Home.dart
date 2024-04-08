@@ -99,7 +99,7 @@ class _HomePageContentState extends State<HomePageContent> {
                                 animeEngName: animeData['name'],
                                 animePoster: animeData['coverImage']
                                     ['extraLarge'],
-                                availablePlatform: 'netflix',
+                                availablePlatform: animeData['lc'][0],
                                 );
                           }).toList(),
                         );

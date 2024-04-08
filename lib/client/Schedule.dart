@@ -158,6 +158,7 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
                         itemCount: snapshot.data?.length ?? 0,
                         itemBuilder: (context, index) {
                           var animeData = snapshot.data![index]['media'];
+                          var lc = snapshot.data![index]['lc'];
                           var coverImage =
                               animeData['coverImage']['extraLarge'];
                           return AnimeCard(
@@ -165,7 +166,7 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
                             animeOriginalName: animeData['jpName'],
                             animeEngName: animeData['name'],
                             animePoster: coverImage,
-                            availablePlatform: 'netflix',
+                            availablePlatform: lc[0] ?? 'N/A',
                           );
                         },
                       );

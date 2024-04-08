@@ -57,11 +57,14 @@ class AnimeCard extends StatelessWidget {
                       child: Container(
                         width: 25,
                         height: 25,
+                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           image: DecorationImage(
-                            image: AssetImage('./asset/$availablePlatform.png'),
+                            image: NetworkImage(availablePlatform),
                             fit: BoxFit.cover,
                           ),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
