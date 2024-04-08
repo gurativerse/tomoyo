@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
 
@@ -11,9 +15,49 @@ class Profile extends StatelessWidget {
   }
 }
 
-class ProfileContent extends StatelessWidget {
+class ProfileContent extends StatefulWidget {
+  @override
+  _ProfileContentState createState() => _ProfileContentState();
+}
+
+class _ProfileContentState extends State<ProfileContent> {
   User? user = FirebaseAuth.instance.currentUser;
-  
+  final ImagePicker _picker = ImagePicker();
+
+  get http => null;
+
+  Future<void> pickAndUploadImage() async {
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image == null) return; // User canceled the picker
+
+    final String uploadUrl = dotenv.env['UPLOAD_ENDPOINT'] ?? '';
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse(uploadUrl))
+      ..files.add(await http.MultipartFile.fromPath('file', image.path));
+
+    // Send the request
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      // Get the response from the server
+      var responseData = await response.stream.toBytes();
+      var responseString = String.fromCharCodes(responseData);
+      var decoded = json.decode(responseString);
+
+      // Assuming 'url' is the key in the response JSON
+      var imageUrl = decoded['url'];
+
+      await user!.updatePhotoURL(imageUrl);
+
+      // Ensure the UI is refreshed, e.g., by setting state or other means
+      setState(() {});
+    } else {
+      print('Image upload failed.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,12 +91,20 @@ class ProfileContent extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                ClipOval(
-                                  child: SizedBox.fromSize(
+                                GestureDetector(
+                                  onTap: () async {
+                                    await pickAndUploadImage();
+                                  },
+                                  child: ClipOval(
+                                      child: SizedBox.fromSize(
                                     size: Size.fromRadius(40),
-                                    child: Image.asset('./asset/profile.png',
-                                        fit: BoxFit.cover),
-                                  ),
+                                    child: user!.photoURL != null
+                                        ? Image.network(
+                                            user!.photoURL.toString(),
+                                            fit: BoxFit.cover)
+                                        : Image.asset('./asset/profile.png',
+                                            fit: BoxFit.cover),
+                                  )),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 25, right: 10),

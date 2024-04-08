@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tomoyo/shared/RecommendCard.dart';
 import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
 
@@ -10,6 +11,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<List<dynamic>> fetchAnimeList() async {
   final apiUrl = dotenv.env['API_URL'];
   final response = await http.get(Uri.parse('$apiUrl/v1/animes/seasonal'));
+
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body)['data'];
+  } else {
+    throw Exception('Failed to load anime list');
+  }
+}
+
+Future<Map<String, dynamic>> fetchRecommendAnime() async {
+  final apiUrl = dotenv.env['API_URL'];
+  final response = await http.get(Uri.parse('$apiUrl/v1/animes/featured'));
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body)['data'];
@@ -33,11 +45,13 @@ class HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<HomePageContent> {
   late Future<List<dynamic>> _animeList;
+  late Future<Map<String, dynamic>> _recommendList;
 
   @override
   void initState() {
     super.initState();
     _animeList = fetchAnimeList();
+    _recommendList = fetchRecommendAnime();
   }
 
   @override
@@ -51,16 +65,7 @@ class _HomePageContentState extends State<HomePageContent> {
               child: Column(
                 children: [
                   // Recommend
-                  Container(
-                    width: double.infinity,
-                    height: 120,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Image.asset('./asset/reccommendex.png',
-                        fit: BoxFit.cover),
-                  ),
+                  RecommendCard(),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime trend and see all
                   Row(
@@ -97,7 +102,8 @@ class _HomePageContentState extends State<HomePageContent> {
                               animeId: animeData['id'] ?? 0,
                               animeOriginalName: animeData['jpName'] ?? '',
                               animeEngName: animeData['name'] ?? '',
-                              animePoster:  animeData['coverImage']['extraLarge'] ?? '',
+                              animePoster:
+                                  animeData['coverImage']['extraLarge'] ?? '',
                             );
                           }).toList(),
                         );

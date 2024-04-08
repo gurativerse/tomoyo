@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:tomoyo/shared/RecommendCard.dart';
 import '../theme.dart';
 import '../shared/AnimeCard.dart';
 import '../shared/DefaultLayout.dart';
@@ -113,16 +114,7 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
               child: Column(
                 children: [
                   // Recommend
-                  Container(
-                    width: double.infinity,
-                    height: 120,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Image.asset('./asset/reccommendex.png',
-                        fit: BoxFit.cover),
-                  ),
+                  RecommendCard(),
                   Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                   // Anime trend and see all
                   Container(
