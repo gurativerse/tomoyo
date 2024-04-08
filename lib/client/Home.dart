@@ -94,13 +94,12 @@ class _HomePageContentState extends State<HomePageContent> {
                           shrinkWrap: true,
                           children: animeList.map((animeData) {
                             return AnimeCard(
-                                animeId: animeData['id'],
-                                animeOriginalName: animeData['jpName'],
-                                animeEngName: animeData['name'],
-                                animePoster: animeData['coverImage']
-                                    ['extraLarge'],
-                                availablePlatform: animeData['lc'][0],
-                                );
+                              animeId: animeData['id'] ?? 0,
+                              animeOriginalName: animeData['jpName'] ?? '',
+                              animeEngName: animeData['name'] ?? '',
+                              animePoster:  animeData['coverImage']['extraLarge'] ?? '',
+                              availablePlatform: animeData['lc'] ?? '',
+                            );
                           }).toList(),
                         );
                       } else {

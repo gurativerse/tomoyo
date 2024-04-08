@@ -101,27 +101,18 @@ class _SearchPageContentState extends State<SearchPageContent> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
-                    child: TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Color(ColorPalatte.color['button']!)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
+                    child: Container(
+                        height: 40, // Adjust height as needed
+                        width: 40, // Adjust width as needed
+                        decoration: BoxDecoration(
+                          color: Color(ColorPalatte.color['button']!),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                      onPressed: () => searchAnime(_controller.text),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                        child: Icon(
-                          Icons.manage_search,
-                          color: Colors.white,
+                        child: InkWell(
+                          onTap: () => searchAnime(_controller.text),
+                          child: Icon(Icons.manage_search, color: Colors.white),
                         ),
-                      ),
-                    ),
+                      )
                   ),
                 ],
               ),

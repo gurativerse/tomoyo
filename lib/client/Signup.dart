@@ -63,7 +63,7 @@ class _SignupState extends State<Signup> {
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: Text('Okay'),
+            child: Text('OK'),
             onPressed: () {
               Navigator.of(ctx).pop();
             },
