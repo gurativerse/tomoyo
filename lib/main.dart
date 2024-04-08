@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tomoyo/shared/splash.dart';
 import 'theme.dart';
@@ -5,7 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    print(e);
+  }
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }

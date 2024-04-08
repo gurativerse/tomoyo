@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
+import 'package:tomoyo/client/Signup.dart';
 import '../theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,12 +26,22 @@ class LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'new to Tomoyo?',
+                  'New to Tomoyo?',
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(width: 8),
-                Text('Sign up',
-                    style: TextStyle(color: Color(ColorPalatte.color['button']!), fontSize: 16)),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Signup()),
+                    );
+                  },
+                  child: Text('Sign up',
+                      style: TextStyle(
+                          color: Color(ColorPalatte.color['button']!),
+                          fontSize: 16)),
+                ),
               ],
             ),
           ),
@@ -102,7 +113,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'forgot password?',
+                            'Forgot password?',
                             style: TextStyle(fontSize: 12, color: Colors.black),
                             textAlign: TextAlign.end,
                           ),
