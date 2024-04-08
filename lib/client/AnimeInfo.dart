@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tomoyo/shared/AnimeCard.dart';
 import 'package:tomoyo/shared/VideoPlayer.dart';
-import 'package:video_player/video_player.dart';
 import '../theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +31,22 @@ Future<List<dynamic>> fetchEpisodeInfo(animeId) async {
     return jsonDecode(response.body)['data'];
   } else {
     throw Exception('Failed to load episode info');
+  }
+}
+
+Future<bool> addtoFavoriteList(animeId) async {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  final uid = user!.uid;
+
+  final apiUrl = dotenv.env['API_URL'];
+
+  final response = await http.patch(Uri.parse('$apiUrl/v1/user/anime/list/$uid/$animeId'));
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw Exception('Failed to update favorite list: ${response.body}');
   }
 }
 
@@ -64,7 +80,6 @@ class AnimeInfoPage extends StatefulWidget {
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
-  final String availablePlatform;
 
   const AnimeInfoPage({
     Key? key,
@@ -72,7 +87,6 @@ class AnimeInfoPage extends StatefulWidget {
     required this.animeOriginalName,
     required this.animeEngName,
     required this.animePoster,
-    required this.availablePlatform,
   }) : super(key: key);
 
   @override
@@ -298,7 +312,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                         Padding(padding: EdgeInsets.only(top: 10)),
                         YouTubePlayerScreen(
                             videolink:
-                                'https://www.youtube.com/watch?v=YvGSK8mIlt8'),
+                                animeData['trailer'] as String? ?? ''),
                         Padding(padding: EdgeInsets.only(top: 20)),
                         Text(
                           'Episodes',
@@ -427,7 +441,6 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               animeEngName: animeData['title'],
                               animePoster: animeData['coverImage'] ??
                                   'path/to/your/placeholder/image.jpg',
-                              availablePlatform: 'netflix',
                             );
                           }).toList(),
                         )
@@ -544,7 +557,25 @@ class AnimeInfoHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await addtoFavoriteList(animeId);
+                      showDialog(
+                        // ignore: use_build_context_synchronously
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Added to Favourite List'),
+                          content: const Text('This anime has been added to your favourite list'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -597,7 +628,7 @@ class AnimeInfoHeader extends StatelessWidget {
                               Text(
                                 status == 'RELEASING'
                                     ? 'Currently Airing'
-                                    : 'Finished Airing',
+                                    : 'Not in Airing',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12,
@@ -641,7 +672,9 @@ class AnimeInfoHeader extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    status,
+                                    status == 'NOT_YET_RELEASED'
+                                        ? 'Not Released'
+                                        : 'Released',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 12,

@@ -98,7 +98,6 @@ class _HomePageContentState extends State<HomePageContent> {
                               animeOriginalName: animeData['jpName'] ?? '',
                               animeEngName: animeData['name'] ?? '',
                               animePoster:  animeData['coverImage']['extraLarge'] ?? '',
-                              availablePlatform: animeData['lc'] ?? '',
                             );
                           }).toList(),
                         );

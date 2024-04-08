@@ -7,7 +7,7 @@ class AnimeCard extends StatelessWidget {
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
-  final String availablePlatform;
+  // final String availablePlatform;
 
   const AnimeCard({
     Key? key,
@@ -15,7 +15,7 @@ class AnimeCard extends StatelessWidget {
     required this.animeOriginalName,
     required this.animeEngName,
     required this.animePoster,
-    required this.availablePlatform,
+    // required this.availablePlatform,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,6 @@ class AnimeCard extends StatelessWidget {
                         animeOriginalName: animeOriginalName,
                         animeEngName: animeEngName,
                         animePoster: animePoster,
-                        availablePlatform: availablePlatform,
                       )));
         },
         child: Card(
@@ -58,14 +57,6 @@ class AnimeCard extends StatelessWidget {
                         width: 25,
                         height: 25,
                         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            image: NetworkImage(availablePlatform),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
                       ),
                     ),
                   ],

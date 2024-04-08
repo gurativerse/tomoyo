@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:tomoyo/client/Signup.dart';
 import '../theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Home.dart';
@@ -28,10 +29,6 @@ class _LoginPageState extends State<LoginPage> {
 
         final user = newUser.user;
         if (user != null) {
-          print('Updating user name to: $_username');
-          await user.updateDisplayName(_username);
-          await user.reload();
-
 
           Navigator.pushReplacement(
             context,
@@ -95,10 +92,10 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => Signup()),
                         );
                       },
-                      child: Text('Sign in',
+                      child: Text('Sign up',
                           style: TextStyle(
                               color: Color(ColorPalatte.color['button']!),
                               fontSize: 16)),

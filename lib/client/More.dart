@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Favourite.dart';
 import 'package:tomoyo/client/Login.dart';
@@ -15,6 +16,8 @@ class MorePage extends StatelessWidget {
 }
 
 class MorePageContent extends StatelessWidget {
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,20 +25,20 @@ class MorePageContent extends StatelessWidget {
         Expanded(
             child: SingleChildScrollView(
           child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
               child: Column(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Account'),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                      const Text('Account'),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       GestureDetector(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Profile()));
+                                    builder: (context) => const Profile()));
                           },
                           child: Container(
                               width: double.infinity,
@@ -45,7 +48,7 @@ class MorePageContent extends StatelessWidget {
                                 color: Color(ColorPalatte.color['setting']!),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -54,16 +57,16 @@ class MorePageContent extends StatelessWidget {
                                         children: [
                                           ClipOval(
                                             child: SizedBox.fromSize(
-                                              size: Size.fromRadius(25),
+                                              size: const Size.fromRadius(25),
                                               child: Image.asset(
                                                   './asset/profile.png',
                                                   fit: BoxFit.cover),
                                             ),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.only(left: 25),
-                                            child: Text('guragura',
-                                                style: TextStyle(
+                                            padding: const EdgeInsets.only(left: 25),
+                                            child: Text(user!.displayName.toString(),
+                                                style: const TextStyle(
                                                     fontSize: 20,
                                                     fontWeight:
                                                         FontWeight.bold)),
@@ -79,11 +82,11 @@ class MorePageContent extends StatelessWidget {
                                   )))),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(top: 8)),
+                  const Padding(padding: EdgeInsets.only(top: 8)),
                   GestureDetector(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Favourite()));
+                            MaterialPageRoute(builder: (context) => const Favourite()));
                       },
                       child: Container(
                           width: double.infinity,
@@ -93,12 +96,12 @@ class MorePageContent extends StatelessWidget {
                             color: Color(ColorPalatte.color['setting']!),
                           ),
                           child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('My favourite',
+                                  const Text('My Favourite',
                                       style: TextStyle(
                                         fontSize: 16,
                                       )),
@@ -108,12 +111,12 @@ class MorePageContent extends StatelessWidget {
                                   ),
                                 ],
                               )))),
-                  Padding(padding: EdgeInsets.only(top: 20)),
+                  const Padding(padding: EdgeInsets.only(top: 20)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Option'),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                      const Text('Option'),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       GestureDetector(
                           onTap: () {
                           },
@@ -125,12 +128,12 @@ class MorePageContent extends StatelessWidget {
                                 color: Color(ColorPalatte.color['setting']!),
                               ),
                               child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Content Language',
+                                      const Text('Content Language',
                                           style: TextStyle(
                                             fontSize: 16,
                                           )),
@@ -143,11 +146,11 @@ class MorePageContent extends StatelessWidget {
                                   )))),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(top: 8)),
+                  const Padding(padding: EdgeInsets.only(top: 8)),
                   GestureDetector(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Policy()));
+                            MaterialPageRoute(builder: (context) => const Policy()));
                       },
                       child: Container(
                           width: double.infinity,
@@ -157,12 +160,12 @@ class MorePageContent extends StatelessWidget {
                             color: Color(ColorPalatte.color['setting']!),
                           ),
                           child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Privacy Policy',
+                                  const Text('Privacy Policy',
                                       style: TextStyle(
                                         fontSize: 16,
                                       )),
@@ -172,19 +175,21 @@ class MorePageContent extends StatelessWidget {
                                   ),
                                 ],
                               )))),
-                  Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                  ElevatedButton(
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0XFFEA4958)),
+                          MaterialStateProperty.all<Color>(const Color(0XFFEA4958)),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
                       );
                     },
-                    child: Padding(
+                    child: const Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                       child: Text(

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tomoyo/client/Home.dart';
 import 'package:tomoyo/client/More.dart';
@@ -16,6 +17,7 @@ class DefaultLayout extends StatefulWidget {
 
 class DefaultLayoutState extends State<DefaultLayout> {
   late int currentIndex;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -87,7 +89,7 @@ class DefaultLayoutState extends State<DefaultLayout> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
-                      child: Text('guragura', style: TextStyle(fontSize: 16)),
+                      child: Text(user!.displayName.toString(), style: TextStyle(fontSize: 16)),
                     ),
                   ],
                 ),

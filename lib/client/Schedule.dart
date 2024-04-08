@@ -166,7 +166,6 @@ class _SchedulePageContentState extends State<SchedulePageContent> {
                             animeOriginalName: animeData['jpName'],
                             animeEngName: animeData['name'],
                             animePoster: coverImage,
-                            availablePlatform: lc[0] ?? 'N/A',
                           );
                         },
                       );

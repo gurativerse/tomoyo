@@ -51,6 +51,8 @@ class _SearchPageContentState extends State<SearchPageContent> {
 
       final detailsFutures = ids.map((id) => fetchAnimeInfo(id)).toList();
       final detailsResults = await Future.wait(detailsFutures);
+
+      print(detailsResults);
       setState(() {
         searchResults = detailsResults;
         _isLoading = false;
@@ -100,8 +102,8 @@ class _SearchPageContentState extends State<SearchPageContent> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Container(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Container(
                         height: 40, // Adjust height as needed
                         width: 40, // Adjust width as needed
                         decoration: BoxDecoration(
@@ -112,8 +114,7 @@ class _SearchPageContentState extends State<SearchPageContent> {
                           onTap: () => searchAnime(_controller.text),
                           child: Icon(Icons.manage_search, color: Colors.white),
                         ),
-                      )
-                  ),
+                      )),
                 ],
               ),
               if (_isLoading) // Display loading indicator when searching
@@ -156,9 +157,7 @@ class _SearchPageContentState extends State<SearchPageContent> {
                     animeOriginalName: anime['title']['native']?.toString() ??
                         anime['title']['romaji'].toString(),
                     animePoster: anime['coverImage']['large'].toString(),
-                    availablePlatform: anime['lc'][0],
                     animeDescription: anime['description'].toString(),
-                    lc: anime['lc'],
                   );
                 }).toList(),
               ),

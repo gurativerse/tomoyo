@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
@@ -11,6 +12,8 @@ class Profile extends StatelessWidget {
 }
 
 class ProfileContent extends StatelessWidget {
+  User? user = FirebaseAuth.instance.currentUser;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +56,7 @@ class ProfileContent extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 25, right: 10),
-                                  child: Text('guragura',
+                                  child: Text(user!.displayName.toString(),
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)),
@@ -80,7 +83,7 @@ class ProfileContent extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "gawrgura@vtuber.com",
+                      user!.email.toString(),
                       style: TextStyle(fontSize: 16),
                     ),
                   ),

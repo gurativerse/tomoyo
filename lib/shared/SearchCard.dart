@@ -8,9 +8,7 @@ class SearchCard extends StatelessWidget {
   final String animeOriginalName;
   final String animeEngName;
   final String animePoster;
-  final String availablePlatform;
   final String animeDescription;
-  final List lc;
 
   const SearchCard(
       {Key? key,
@@ -18,9 +16,7 @@ class SearchCard extends StatelessWidget {
       required this.animeOriginalName,
       required this.animeEngName,
       required this.animePoster,
-      required this.availablePlatform,
-      required this.animeDescription,
-      required this.lc})
+      required this.animeDescription})
       : super(key: key);
 
   @override
@@ -42,7 +38,6 @@ class SearchCard extends StatelessWidget {
                         animeOriginalName: animeOriginalName,
                         animeEngName: animeEngName,
                         animePoster: animePoster,
-                        availablePlatform: availablePlatform,
                       )));
         },
         child: Card(
@@ -102,13 +97,13 @@ class SearchCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Image.network(
-                              lc[0]['icon'].toString(),
-                              width: 30,
-                            ), // Or Image.asset for local assets
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(right: 8.0),
+                          //   child: Image.network(
+                          //     lc[0]['icon'].toString(),
+                          //     width: 30,
+                          //   ), // Or Image.asset for local assets
+                          // ),
                           TextButton(
                             style: ButtonStyle(
                               minimumSize:
