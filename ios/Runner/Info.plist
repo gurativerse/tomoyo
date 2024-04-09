@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To upload the profile picture, access to the gallery is required.</string>
 	<key>CFBundleDisplayName</key>
 	<string>Tomoyo</string>
 	<key>CFBundleExecutable</key>

@@ -82,14 +82,18 @@ class DefaultLayoutState extends State<DefaultLayout> {
                   children: [
                     ClipOval(
                       child: SizedBox.fromSize(
-                        size: Size.fromRadius(15), // Image radius
-                        child: Image.asset('./asset/profile.png',
-                            fit: BoxFit.cover),
-                      ),
+                          size: Size.fromRadius(15), // Image radius
+                          child: Image.network(
+                            user!.photoURL != null
+                                ? user!.photoURL.toString()
+                                : 'https://img.rdcw.co.th/images/d110682b18ad879a47a06a4c81b8659ef2863b2b232a6446572c7212d318efe9.png',
+                            fit: BoxFit.cover,
+                          )),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
-                      child: Text(user!.displayName.toString(), style: TextStyle(fontSize: 16)),
+                      child: Text(user!.displayName.toString(),
+                          style: TextStyle(fontSize: 16)),
                     ),
                   ],
                 ),

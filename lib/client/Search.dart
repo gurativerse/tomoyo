@@ -52,7 +52,6 @@ class _SearchPageContentState extends State<SearchPageContent> {
       final detailsFutures = ids.map((id) => fetchAnimeInfo(id)).toList();
       final detailsResults = await Future.wait(detailsFutures);
 
-      print(detailsResults);
       setState(() {
         searchResults = detailsResults;
         _isLoading = false;

@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import '../theme.dart';
 import '../shared/DefaultLayout.dart';
+import 'package:http/http.dart' as http;
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -21,41 +22,67 @@ class ProfileContent extends StatefulWidget {
 }
 
 class _ProfileContentState extends State<ProfileContent> {
+  String? profileImageUrl;
   User? user = FirebaseAuth.instance.currentUser;
   final ImagePicker _picker = ImagePicker();
 
-  get http => null;
+  @override
+  void initState() {
+    super.initState();
+    profileImageUrl = user?.photoURL;
+  }
 
   Future<void> pickAndUploadImage() async {
-    // Pick an image
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image == null) return; // User canceled the picker
+    if (image == null) return;
 
     final String uploadUrl = dotenv.env['UPLOAD_ENDPOINT'] ?? '';
 
-    // Create a multipart request
     var request = http.MultipartRequest('POST', Uri.parse(uploadUrl))
-      ..files.add(await http.MultipartFile.fromPath('file', image.path));
+      ..files.add(await http.MultipartFile.fromPath('file', image.path))
+      ..headers.addAll({
+        'Accept': '*/*',
+        'User-Agent': 'Tomoyo',
+      });
 
-    // Send the request
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      // Get the response from the server
       var responseData = await response.stream.toBytes();
       var responseString = String.fromCharCodes(responseData);
       var decoded = json.decode(responseString);
 
-      // Assuming 'url' is the key in the response JSON
       var imageUrl = decoded['url'];
+
 
       await user!.updatePhotoURL(imageUrl);
 
-      // Ensure the UI is refreshed, e.g., by setting state or other means
-      setState(() {});
+      setState(() {
+        profileImageUrl = imageUrl;
+      });
     } else {
-      print('Image upload failed.');
+      print('Response code: ${response.statusCode}');
+      _showErrorDialog(
+          'File might be bigger than allowable size. Please try again with a different picture!');
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Uploading Profile Failed'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -97,14 +124,12 @@ class _ProfileContentState extends State<ProfileContent> {
                                   },
                                   child: ClipOval(
                                       child: SizedBox.fromSize(
-                                    size: Size.fromRadius(40),
-                                    child: user!.photoURL != null
-                                        ? Image.network(
-                                            user!.photoURL.toString(),
-                                            fit: BoxFit.cover)
-                                        : Image.asset('./asset/profile.png',
-                                            fit: BoxFit.cover),
-                                  )),
+                                          size: Size.fromRadius(40),
+                                          child: Image.network(
+                                              user!.photoURL != null
+                                                  ? user!.photoURL.toString()
+                                                  : 'https://img.rdcw.co.th/images/d110682b18ad879a47a06a4c81b8659ef2863b2b232a6446572c7212d318efe9.png',
+                                              fit: BoxFit.cover))),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 25, right: 10),

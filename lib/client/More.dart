@@ -48,7 +48,8 @@ class MorePageContent extends StatelessWidget {
                                 color: Color(ColorPalatte.color['setting']!),
                               ),
                               child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -58,14 +59,19 @@ class MorePageContent extends StatelessWidget {
                                           ClipOval(
                                             child: SizedBox.fromSize(
                                               size: const Size.fromRadius(25),
-                                              child: Image.asset(
-                                                  './asset/profile.png',
+                                              child: Image.network(
+                                                  user!.photoURL != null
+                                                      ? user!.photoURL
+                                                          .toString()
+                                                      : 'https://img.rdcw.co.th/images/d110682b18ad879a47a06a4c81b8659ef2863b2b232a6446572c7212d318efe9.png',
                                                   fit: BoxFit.cover),
                                             ),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Text(user!.displayName.toString(),
+                                            padding:
+                                                const EdgeInsets.only(left: 25),
+                                            child: Text(
+                                                user!.displayName.toString(),
                                                 style: const TextStyle(
                                                     fontSize: 20,
                                                     fontWeight:
@@ -85,8 +91,10 @@ class MorePageContent extends StatelessWidget {
                   const Padding(padding: EdgeInsets.only(top: 8)),
                   GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const Favourite()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Favourite()));
                       },
                       child: Container(
                           width: double.infinity,
@@ -96,7 +104,8 @@ class MorePageContent extends StatelessWidget {
                             color: Color(ColorPalatte.color['setting']!),
                           ),
                           child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -118,8 +127,7 @@ class MorePageContent extends StatelessWidget {
                       const Text('Option'),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Container(
                               width: double.infinity,
                               height: 60,
@@ -128,7 +136,8 @@ class MorePageContent extends StatelessWidget {
                                 color: Color(ColorPalatte.color['setting']!),
                               ),
                               child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -149,8 +158,10 @@ class MorePageContent extends StatelessWidget {
                   const Padding(padding: EdgeInsets.only(top: 8)),
                   GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const Policy()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Policy()));
                       },
                       child: Container(
                           width: double.infinity,
@@ -160,7 +171,8 @@ class MorePageContent extends StatelessWidget {
                             color: Color(ColorPalatte.color['setting']!),
                           ),
                           child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -176,17 +188,18 @@ class MorePageContent extends StatelessWidget {
                                 ],
                               )))),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                ElevatedButton(
+                  ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(const Color(0XFFEA4958)),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0XFFEA4958)),
                     ),
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
 
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
                       );
                     },
                     child: const Padding(
